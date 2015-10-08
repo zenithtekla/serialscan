@@ -157,7 +157,8 @@ div.quick-summary-right	{ width: 49%; padding: 2px; text-align: right; float: ri
 .right					{ text-align: right !important; }
 .floatright				{ float: right !important; }
 .floatleft				{ float: left; }
-.marginright			{ margin-right: 1% };
+.marginleft				{ margin-left: 1% !important; };
+.marginright			{ margin-right: 1%; };
 .small					{ font-size: 8pt; }
 .small-normal 			{ font-size: 8pt; font-weight: normal; }
 .small-subprojects		{ font-size: 8pt; width: 200px; }

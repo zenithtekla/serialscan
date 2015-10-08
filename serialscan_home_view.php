@@ -40,9 +40,18 @@
 		</div>
 
 		<div id="head-info-wrapper" class="row">
-			<div id="assembly-number">	Assembly number: '	. $t_assembly_number . ' </div>
-			<div id="revision">			Revision: ' 		. $t_revision		 . ' </div>
-			<div id="sale-order">		Sale Order: ' 		. $t_sale_order		 . ' </div>
+			<div id="general_input" class="input-group input-group-sm col-sm-4">
+				<span class="input-group-addon" id="sizing-addon1">Assembly number&nbsp<span class="required">*</span></span>
+				<input type="text" id="assembly-number" class="form-control" placeholder="enter assembly number" aria-describedby="sizing-addon1" required>
+			</div>
+			<div id="general_input" class="input-group input-group-sm col-sm-4">
+				<span class="input-group-addon" id="sizing-addon1">Revision &nbsp<span class="required">*</span></span>
+				<input type="text" id="revision" class="form-control" placeholder="enter revision #" aria-describedby="sizing-addon1" required>
+			</div>
+			<div id="general_input" class="input-group input-group-sm col-sm-4">
+				<span class="input-group-addon" id="sizing-addon1">Sale Order &nbsp<span class="required">*</span></span>
+				<input type="text" id="revision" class="form-control" placeholder="enter sale order #" aria-describedby="sizing-addon1" required>
+			</div>
 		</div>
 
 		<div id="main-wrapper" class="col-md-11 pull-right">

@@ -15,7 +15,7 @@
 	echo '
 	<div class="container">
 		<!-- Console Log -->
-		<div id="row" class="col-md-11 pull-right">
+		<div id="row" class="col-md-11">
 		    <div class="page-header"><h3>Console Log</h3></div>
             <p>Query result.....
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget magna et ante suscipit lacinia. Aenean porttitor velit id pretium blandit. Aenean ut sodales ante. Ut faucibus ornare venenatis. </p>
@@ -45,14 +45,13 @@
 		</div><!-- /row -->
 
 		<div class="row">
-		    <div id="query" class="input-group col-lg-6 input-xl">
-		      <input type="text" id="query-input" class="form-control" placeholder="Input a query string">
+		    <div id="query" class="col-lg-6 input-xl margin-left">
+		      <textarea id="query-input" class="field span12" cols="140" rows="10" placeholder="Enter a short synopsis"></textarea>
 		      <span class="input-group-btn">
 		        <button id="query-button" class="btn btn-success" type="button"><span class="glyphicon glyphicon-search"></span>&nbspQuery</button>
 		      </span>
+		    </div>
 		</div><!-- /row -->
-
-
 
 		<div class="row">
 		    <div id="search" class="input-group">
