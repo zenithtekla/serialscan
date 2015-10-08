@@ -214,7 +214,7 @@ div.quick-summary-right	{ width: 49%; padding: 2px; text-align: right; float: ri
 #main-wrapper {
     height: 100%;
     overflow-y: auto;
-    padding: 50px 0 0px 0;
+    padding: 10px 60px 2px 0;
 }
 #main {
     position: relative;
@@ -232,3 +232,7 @@ div.quick-summary-right	{ width: 49%; padding: 2px; text-align: right; float: ri
         padding-top: 0px;
     }
 }
+
+.save_button { margin-left: 0%; }
+span .entreprise { font-size: 15 !important; }
+.col-centered { float: none; margin: 0 auto; }
