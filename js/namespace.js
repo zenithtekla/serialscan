@@ -3,6 +3,7 @@
 
     /*In a nutshell, namespacing is a way to protect your code using javascript object literal notation to provide encapsulation. Minimizing your code’s footprint in this root scope by structuring your methods/data inside a single namespace should be the goal of every decent developer. The advantages are that you can name your variables whatever you like and not have to worry about some other code overwriting it’s value. In this post I’m going to show you nested object namespacing because this is the most common form of namespacing in jQuery.
     http://www.sitepoint.com/jquery-function-namespacing-plain-english/
+    http://ryanflorence.com/use-your-fn-jquery-namespace/
 
     jQuery4u = {
                     multiply : function (x,y){

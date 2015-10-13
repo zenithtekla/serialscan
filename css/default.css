@@ -234,6 +234,6 @@ div.quick-summary-right	{ width: 49%; padding: 2px; text-align: right; float: ri
     }
 }
 
-.save_button { margin-left: 0%; }
-span .entreprise { font-size: 15 !important; }
+.save-button { margin-left: 0%; }
 .col-centered { float: none; margin: 0 auto; }
+.right-scroll { overflow-y: scroll; }

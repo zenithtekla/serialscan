@@ -6799,4 +6799,13 @@ button.close {
     display: none !important;
   }
 }
+@media print {
+  a[href]:after {
+    content: none !important;
+  }
+}
+
+.no-print {
+  content: none !important;
+}
 /*# sourceMappingURL=bootstrap.css.map */
