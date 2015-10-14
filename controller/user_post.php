@@ -2,6 +2,12 @@
 	require_once('../model/dbi_con.php');
 	$value = $_POST['value'];
 
+	$t_assembly_number 	= mysql_real_escape_string($_SESSION['assembly_number']);
+	$t_revision 		= mysql_real_escape_string($_SESSION['revision']);
+	$t_sale_order 		= mysql_real_escape_string($_SESSION['sale_order']);
+
+
+
 	if(!empty($value)) {
 		$result = $mysqli->query("UPDATE users SET ".$_POST['name']."=" . mysql_escape_string($value) . " WHERE user_id = " . $_POST['pk']) or die(mysqli_error());
 

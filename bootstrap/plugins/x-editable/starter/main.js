@@ -1,4 +1,10 @@
 $(document).ready(function() {
+    //init user-access
+    $('.user-access').editable({
+      url: '/post',
+      placement: 'right'
+    });
+
     //init editables
     $('.myeditable').editable({
       url: '/post',
@@ -7,6 +13,22 @@ $(document).ready(function() {
 
     //make username required
     $('#new_username').editable('option', 'validate', function(v) {
+       if(!v) return 'Required field!';
+    });
+
+    $('#password').editable('option', 'validate', function(v) {
+       if(!v) return 'Required field!';
+    });
+
+    $('#assembly-number').editable('option', 'validate', function(v) {
+       if(!v) return 'Required field!';
+    });
+
+    $('#revision').editable('option', 'validate', function(v) {
+       if(!v) return 'Required field!';
+    });
+
+    $('#sale-order').editable('option', 'validate', function(v) {
        if(!v) return 'Required field!';
     });
 
@@ -24,7 +46,7 @@ $(document).ready(function() {
                    //remove unsaved class
                    $(this).removeClass('editable-unsaved');
                    //show messages
-                   var msg = 'New user created! Now editables submit individually.';
+                   var msg = 'New session created! Now editables submit individually.';
                    $('#msg').addClass('alert-success').removeClass('alert-error').html(msg).show();
                    $('#save-btn').hide();
                } else if(data && data.errors){
@@ -104,7 +126,7 @@ $(document).ready(function() {
 
         },
         ajaxOptions: { url: 'post.php'},
-        params: function(params) { // http://stackoverflow.com/questions/16744965/how-do-i-stop-a-bootstrap-x-editable-from-updating-an-edited-field-when-ajax-cal
+        params: function(params) {
             var d = new $.Deferred;
             console.log("id of element changed: " + params.name);
             console.log("new value: " + params.value);
@@ -114,23 +136,5 @@ $(document).ready(function() {
             }, 500); // http://tutorials.jenkov.com/jquery/deferred-objects.html#codeBox
             return d.promise();
         }
-    });
-
-    //make status editable
-    $('#status').editable({
-        type: 'select',
-        title: 'Select status',
-        placement: 'right',
-        value: 2,
-        source: [
-            {value: 1, text: 'status 1'},
-            {value: 2, text: 'status 2'},
-            {value: 3, text: 'status 3'}
-        ]
-        /*
-        //uncomment these lines to send data on server
-        ,pk: 1
-        ,url: '/post'
-        */
     });
 });

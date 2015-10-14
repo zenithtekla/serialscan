@@ -1,20 +1,117 @@
-$(function() {
-	$("#printable").find('.print').on('click', function() {
-		$("#printable").print({
-			deferred: $.Deferred(),
-			timeout: 250
-		});
-	});
+$(document).ready(function() {    
 
-	$('#username').editable({
+    //init editables
+    $('.myeditable').editable({
+      url: '/post',
+      placement: 'right'
     });
 
-    $('#field').editable({
-        type:  'input',
-        pk:    1,
-        name:  'assembly-number',
-        url:   'post.php',
+    // autofocus on scan field
+    $('#scan_result').focus();
+
+    $('#scan_result').scannerDetection({
+      timeBeforeScanTest: 200, // wait for the next character for upto 200ms
+      startChar: [120], // Prefix character for the cabled scanner (OPL6845R)
+      endChar: [13], // be sure the scan is complete if key 13 (enter) is detected
+      avgTimeByChar: 40, // it's not a barcode if a character takes longer than 40ms
+      onKeyDetect: function(event){console.log(event.which); return false;}
+      onComplete: function(barcode){
+        alert("barcode");
+        $(this).parent().submit();
+      } // main callback function
     });
+
+    //make username required
+    $('#new_username').editable('option', 'validate', function(v) {
+       if(!v) return 'Required field!';
+    });
+
+    $('#password').editable('option', 'validate', function(v) {
+       if(!v) return 'Required field!';
+    });
+
+    $('#assembly-number').editable('option', 'validate', function(v) {
+       if(!v) return 'Required field!';
+    });
+
+    $('#revision').editable('option', 'validate', function(v) {
+       if(!v) return 'Required field!';
+    });
+
+    $('#sale-order').editable('option', 'validate', function(v) {
+       if(!v) return 'Required field!';
+    });
+
+    //create new user
+    $('#save-btn').click(function() {
+       $('.myeditable').editable('submit', {
+           url: '/newuser',
+           ajaxOptions: {
+               dataType: 'json' //assuming json response
+           },
+           success: function(data, config) {
+               if(data && data.id) {  //record created, response like {"id": 2}
+                   //set pk
+                   $(this).editable('option', 'pk', data.id);
+                   //remove unsaved class
+                   $(this).removeClass('editable-unsaved');
+                   //show messages
+                   var msg = 'New session created! Now editables submit individually.';
+                   $('#msg').addClass('alert-success').removeClass('alert-error').html(msg).show();
+                   $('#save-btn').hide();
+               } else if(data && data.errors){
+                   //server-side validation error, response like {"errors": {"username": "username already exist"} }
+                   config.error.call(this, data.errors);
+               }
+           },
+           error: function(errors) {
+               var msg = '';
+               if(errors && errors.responseText) { //ajax error, errors = xhr object
+                   msg = errors.responseText;
+               } else { //validation error (client-side or server-side)
+                   $.each(errors, function(k, v) { msg += k+": "+v+"<br>"; });
+               }
+               $('#msg').removeClass('alert-success').addClass('alert-error').html(msg).show();
+           }
+       });
+    });
+
+    //reset
+    $('#reset-btn').click(function() {
+       $('.myeditable').editable('setValue', null)
+                       .editable('option', 'pk', null)
+                       .removeClass('editable-unsaved');
+
+       $('#save-btn').show();
+       $('#msg').hide();
+    });
+
+
+    //mockjax
+    $.mockjax({
+        url: '/post',
+        responseTime: 500,
+        responseText: ''
+    });
+
+    $.mockjax({
+        url: '/groups',
+        responseText: {
+            0: 'Guest',
+            1: 'Service',
+            2: 'Customer',
+            3: 'Operator',
+            4: 'Support',
+            5: 'Admin'
+        }
+    });
+
+    $.mockjax({
+        url: '/newuser',
+        responseTime: 300,
+        responseText: '{ "id": 1 }'
+    });
+
 
     $(".canedit").editable({
         type: "text", // send: 'always' above?
@@ -39,7 +136,7 @@ $(function() {
 
         },
         ajaxOptions: { url: 'post.php'},
-        params: function(params) { // http://stackoverflow.com/questions/16744965/how-do-i-stop-a-bootstrap-x-editable-from-updating-an-edited-field-when-ajax-cal
+        params: function(params) {
             var d = new $.Deferred;
             console.log("id of element changed: " + params.name);
             console.log("new value: " + params.value);
@@ -50,23 +147,4 @@ $(function() {
             return d.promise();
         }
     });
-
-    //make status editable
-    $('#status').editable({
-        type: 'select',
-        title: 'Select status',
-        placement: 'right',
-        value: 2,
-        source: [
-            {value: 1, text: 'status 1'},
-            {value: 2, text: 'status 2'},
-            {value: 3, text: 'status 3'}
-        ]
-        /*
-        //uncomment these lines to send data on server
-        ,pk: 1
-        ,url: '/post'
-        */
-    });
 });
-

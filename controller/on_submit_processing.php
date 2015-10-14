@@ -42,15 +42,15 @@ $t_new_input = new NewInput($t_input_type,$t_input_field_name,$t_input_field_val
 $t_type = $t_new_input->getInputType();
 
 switch ($t_type) {
-	case '1':
+	case '3':
 		$t_assembly_number = $t_new_input->getInputValue();
 		break;
 
-	case '2':
+	case '4':
 		$t_revision = $t_new_input->getInputValue();
 		break;
 
-	case '3':
+	case '5':
 		$t_sale_order = $t_new_input->getInputValue();
 		break;
 

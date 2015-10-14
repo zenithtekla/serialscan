@@ -13,14 +13,18 @@
 	<script src="../bootstrap/plugins/bootstrap-editable-v1.1.4/bootstrap-editable/js/bootstrap-editable.min.js"></script>
 	<script src="../bootstrap/plugins/jQuery-Plugin-Js/jQuery.print.js"></script>
 	<script src="../js/main.js" type="text/javascript"></script>
+
+	<script type="text/javascript" src="../plugin/jquery.scannerdetection.js"></script>
+    <script type="text/javascript"></script>
 	<noscript>This webApp requires Javascript</noscript>
 </head>
 <body>
 	<?php
-
-	$t_assembly_number = '#content_holder_001';
-	$t_revision = '#content_holder_002';
-	$t_sale_order = '#content_holder_003';
+	session_start();
+	echo 'session_user: ' . $_SESSION['username']. ', session_login_time: '. $_SESSION['time'];
+	$t_assembly_number = $_SESSION['assembly_number'];
+	$t_revision = $_SESSION['revision'];
+	$t_sale_order = $_SESSION['sale_order'];
 	$t_virhe = '<strong>Warning! #ERROR</strong>_placeholder_001';
 	$t_virhe_kuvaus = '<strong>#ERR</strong>_description_placeholder_002';
 	$t_sessionId = 'md5#0001';
@@ -46,16 +50,16 @@
 
 		<div id="head-info-wrapper" class="row">
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
-				<span class="input-group-addon" id="assembly-number1">Assembly number&nbsp<span class="required">*</span></span>
-				<span class="form-control"><a href="#" id="assembly-number"></a></span>
+				<span class="input-group-addon" id="assembly_number1">Assembly number&nbsp<span class="required">*</span>&nbsp&nbsp</span>
+				<span class="form-control">'.$t_assembly_number.'</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
 				<span class="input-group-addon" id="sizing-addon1">Revision &nbsp<span class="required">*</span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
-				<span class="form-control"><a href="#" id="revision"></a></span>
+				<span class="form-control">'.$t_revision.'</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
 				<span class="input-group-addon" id="sizing-addon1">Sale Order &nbsp<span class="required">*</span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
-				<span class="form-control"><a href="#" id="sale-order"></a></span>
+				<span class="form-control">'.$t_sale_order.'</span>
 			</div>
 		</div>
 
