@@ -21,6 +21,8 @@
 	echo'
 			<a href="#" id="username">superuser</a>
 	';
+	// function console($data, $priority, $debug) http://stackoverflow.com/questions/4323411/how-can-i-write-to-console-in-php
+	// echo("<script>console.log('PHP: ".$data."');</script>");
 
 	?>
 </body>

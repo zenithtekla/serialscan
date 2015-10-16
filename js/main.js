@@ -1,4 +1,8 @@
-$(document).ready(function() {    
+/*  $(function() {
+
+    } */
+
+$(document).ready(function() {
 
     //init editables
     $('.myeditable').editable({
@@ -16,10 +20,16 @@ $(document).ready(function() {
       avgTimeByChar: 40, // it's not a barcode if a character takes longer than 40ms
       onKeyDetect: function(event){console.log(event.which); return false;}
       onComplete: function(barcode){
-        alert("barcode");
+       // alert("# : ", barcode);
         $(this).parent().submit();
       } // main callback function
     });
+
+    $('#logout').on('click',function(){
+        $.post("../controller/core/is_logout.php", {"is_logout": true}, function(data){
+          if (data.is_logout) alert("logout!");
+        },"json");
+    }
 
     //make username required
     $('#new_username').editable('option', 'validate', function(v) {

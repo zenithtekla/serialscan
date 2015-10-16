@@ -10,26 +10,30 @@ class Assembly {
 	}
 	function __destruct(){}
 
-	function setFormatId($val){
+	public function setFormatId($val){
 		$this->format_id = $val;
 	}
-	function getFormatId(){
+	public function getFormatId(){
 		return $this->format_id;
 	}
 
-	function setAssemblyNumber($val){
+	public function setAssemblyNumber($val){
 		$this->assembly_number = $val;
 	}
-	function getAssemblyNumber(){
+	public function getAssemblyNumber(){
 		return $this->assembly_number;
 	}
 
-	function setRevision($val){
+	public function setRevision($val){
 		$this->revision = $val;
 	}
-	function getRevision(){
+	public function getRevision(){
 		return $this->revision;
 	}
+
+	/* public function __isset($name) {
+		return isset( $this->{$name} );
+	} */
 }
 
 // $t_new_assembly = new Assembly($t_formatId, $t_assembly_number, $t_revision);
@@ -43,17 +47,17 @@ class Format {
 	}
 	function __destruct(){}
 
-	function setFormat($val){
+	public function setFormat($val){
 		$this->format = $val;
 	}
-	function getFormat(){
+	public function getFormat(){
 		return $this->format;
 	}
 
-	function setFormatExample($val){
+	public function setFormatExample($val){
 		$this->format_example = $val;
 	}
-	function getFormatExample(){
+	public function getFormatExample(){
 		return $this->format_example;
 	}
 }
@@ -69,17 +73,17 @@ class SaleOrder {
 	}
 	function __destruct(){}
 
-	function setAssemblyId($val){
+	public function setAssemblyId($val){
 		$this->assembly_id = $val;
 	}
-	function getAssemblyId(){
+	public function getAssemblyId(){
 		return $this->assembly_id;
 	}
 
-	function setSaleOrder($val){
+	public function setSaleOrder($val){
 		$this->sale_order = $val;
 	}
-	function getSaleOrder(){
+	public function getSaleOrder(){
 		return $this->sale_order;
 	}
 }
@@ -101,32 +105,33 @@ class Serial {
 	}
 	function __destruct(){}
 
-	function setSaleOrderId($val){
+	public function setSaleOrderId($val){
 		$this->sale_order_id = $val;
 	}
-	function getSaleOrderId(){
+	public function getSaleOrderId(){
 		return $this->sale_order_id;
 	}
 
-	function setSerialNumber($val){
+	public function setSerialNumber($val){
 		$this->serial_number = $val;
 	}
-	function getSerialNumber(){
+	public function getSerialNumber(){
 		return $this->serial_number;
 	}
 
-	function setUserId($val){
+	public function setUserId($val){
 		$this->user_id = $val;
 	}
-	function getUserId(){
+	public function getUserId(){
 		return $this->user_id;
 	}
 
-	function setTime($val){
+	public function setTime($val){
 		$this->time = $val;
 	}
-	function getTime(){
+	public function getTime(){
 		return $this->time;
 	}
 }
 // $t_serial = new Serial($t_sale_order_id, $t_serial_number, $t_user_id, $t_time);
+//
