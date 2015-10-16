@@ -6,7 +6,7 @@ class Assembly {
 	function __construct($format_id, $assembly_number, $revision){
 		$this->format_id = $format_id;
 		$this->assembly_number = $assembly_number;
-		$this->state = $state;
+		$this->revision = $revision;
 	}
 	function __destruct(){}
 
