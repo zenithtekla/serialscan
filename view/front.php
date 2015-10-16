@@ -1,8 +1,17 @@
 <head>
 <link href="../css/default.css" rel="stylesheet">
 <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+  function preventBack(){window.history.forward();}
+  setTimeout("preventBack()", 0);
+  window.onunload=function(){null};
+</script>
 </head>
 <?php
+	/* $host  = $_SERVER['HTTP_HOST'];
+	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\'); */
+
 	session_start();
 	$_SESSION['is_auth'] = false;
 	$t_text = 'some text';

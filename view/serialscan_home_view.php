@@ -92,7 +92,7 @@
 		<div class="row no-print">
 		<div id="scan_input" class="input-group input-group-lg col-lg-offset-4 col-lg-5 col-centered">
 		  <span class="input-group-addon" id="sizing-addon1">#</span>
-		  <input type="text" id="scan_result" class="form-control" placeholder="new serial number (auto-submit)" aria-describedby="sizing-addon1">
+		  <input type="text" autofocus id="scan_result" class="form-control" placeholder="new serial number (auto-submit)" aria-describedby="sizing-addon1">
 		</div>
 		</div><!-- /row -->
 		<div id="konsoli_loki">	<div id="virhe" class="alert alert-danger"> ' 		. $t_virhe . '</div>

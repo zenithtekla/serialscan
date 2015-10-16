@@ -23,7 +23,7 @@
 		// indexing JSON data for key-value pair [format]-[format_example]
 		$t_format_data = json_encode($t_new_format);
 		echo $t_format_data . "<br />";
-		$fp = fopen('../json/format_data.json', 'w') or die("Unable to open file!");
+		$fp = fopen('../json/format_data.json', 'a') or die("Unable to open file!");
 	    fwrite($fp, "\n". $t_format_data);
 	    fclose($fp);
 
@@ -49,7 +49,7 @@
 		// indexing JSON data for key-value pair [assembly_number]-[format]
 		$t_assembly_data = json_encode($t_new_assembly); // unsafe encoding, 3 values not a pair!
 		echo $t_assembly_data . "<br />";
-		$fp = fopen('../json/format_example_data.json', 'w') or die("Unable to open file!");
+		$fp = fopen('../json/format_example_data.json', 'a') or die("Unable to open file!");
 	    fwrite($fp, "\n". $t_assembly_data);
 	    fclose($fp);
 

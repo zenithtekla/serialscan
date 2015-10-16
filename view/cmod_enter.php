@@ -1,6 +1,13 @@
 <head>
 <link href="../css/default.css" rel="stylesheet">
 <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+
+<script>
+  function preventBack(){window.history.forward();}
+  setTimeout("preventBack()", 0);
+  window.onunload=function(){null};
+</script>
+
 </head>
 <?php
 echo '

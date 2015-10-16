@@ -12,6 +12,7 @@ setcookie( session_name(), '', time() - 42000,
 unset($_SESSION['is_auth']);
 session_destroy();
 echo "username is set to : ". $_SESSION['username'];
-printf( '<p class="required">You have been logged out.</p>'
+printf( '<p class="required">You have been logged out.</p>' );
+$_SESSION = array();
 header("refresh:2; url=../view/front.php");
 exit('OK');
