@@ -1,6 +1,7 @@
 <head>
 <link href="../css/default.css" rel="stylesheet">
 <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
 <script>
   function preventBack(){window.history.forward();}
@@ -20,7 +21,7 @@ echo '
 		<p>revision <span class="required">*</span>: 			<input type="text" name="revision"></p>
 		<p>format <span class="required">*</span>: 			<input type="text" name="format"></p>
 		<p>format_example <span class="required">*</span>: 			<input type="text" name="format_example"></p>
-		<input type="submit" value="New Format">
+		<input type="submit" value="New Format"> <input type="reset" class="marginleft" value="Reset">
 	</form>
 	</div>
 ';
