@@ -7,7 +7,6 @@
 	<link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   	<script src="../bootstrap/js/bootstrap.min.js"></script>
 
   	<link href="../bootstrap/plugins/x-editable/dist/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
@@ -42,7 +41,7 @@
 			<div id="session-id" class="col-lg-3 no-print"><span id="sessionId"> ' . $t_sessionId . '</span></div>
 			<div id="bouton" class="col-lg-3 no-print">
 				<button type="submit" class="btn btn-success save-button">New Session</button>&nbsp
-				<button type="submit" id="logout" class="btn btn-danger">Save & close session</button>
+				<button type="submit" id="is_logout" class="btn btn-danger">Save & close session</button>
 			</div>
 		</div><!-- /row -->
 
