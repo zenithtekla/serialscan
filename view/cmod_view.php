@@ -5,8 +5,8 @@
 	<title>SerialScan app</title>
 
 	<link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../plugin/jquery/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="../plugin/jqueryui/jquery-ui.min.js"></script>
   	<!-- duplicated <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
   	<script src="../bootstrap/js/bootstrap.min.js"></script>
 

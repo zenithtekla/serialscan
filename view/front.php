@@ -1,7 +1,7 @@
 <head>
 <link href="../css/default.css" rel="stylesheet">
 <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="../plugin/jquery/jquery-1.11.3.min.js"></script>
 <script>
   function preventBack(){window.history.forward();}
   setTimeout("preventBack()", 0);

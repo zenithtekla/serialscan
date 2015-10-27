@@ -2,7 +2,7 @@
 	require_once('../model/dbi_con.php');
 	require_once('../model/db_modeling.php');
 	session_start();
-
+	
 	$t_user_table = 'mantis_user_table';
 	$t_format_table = 'seriscan_format';
 	$t_assembly_table = 'seriscan_assembly';
@@ -10,10 +10,10 @@
 	require_once('core/date_time.php');
 	$_SESSION['time']     = getDateTime();
 
-	$t_assembly_number 	= mysql_real_escape_string($_POST['assembly_number']);
-	$t_revision 		= mysql_real_escape_string($_POST['revision']);
-	$t_format 		= mysql_real_escape_string($_POST['format']);
-	$t_format_example 		= mysql_real_escape_string($_POST['format_example']);
+	$t_assembly_number 	= $mysqli->real_escape_string($_POST['assembly_number']);
+	$t_revision 		= $mysqli->real_escape_string($_POST['revision']);
+	$t_format 		= $mysqli->real_escape_string($_POST['format']);
+	$t_format_example 		= $mysqli->real_escape_string($_POST['format_example']);
 
 	// instantiate new object as a new instance of the Format class.
 	$t_new_format = new Format($t_format,$t_format_example);
@@ -67,6 +67,7 @@
 
 	$t_assemblyId = createAssembly($t_new_assembly->getFormatId(), $t_new_assembly->getAssemblyNumber(), $t_new_assembly->getRevision() );
 
+	echo '<h3><a href="../view/cmod_enter.php">Enter new format</a></h3><br><br>';
 	// now that formatId is ready, awaiting user's input of sale_order and querying the rest to the sale_order table
 	// once the sale_order_id is available, awaiting new scanned serial_number and querying the sale_order_id, serial_number and session user_id with timestamp into the last table. Need syncronization of cmod_post with session_post and user_post (serial_number)!
 ?>

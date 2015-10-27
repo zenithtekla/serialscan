@@ -1,2 +1,9 @@
 
 {"format":"1001","format_example":"1234"}
+{"format":false,"format_example":false}
+{"format":"","format_example":""}
+{"format":"f01","format_example":"0f001"}
+{"format":"0020","format_example":"0200"}
+{"format":"05","format_example":"06"}
+{"format":"3","format_example":"4"}
+{"format":"3","format_example":"3"}

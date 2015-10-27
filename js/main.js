@@ -19,31 +19,20 @@ $(document).ready(function() {
         $(this).parent().submit();
       } // main callback function
     }); */
-
+    // $("button").on('click',function(){
     $('#is_logout').on('click',function(){
         $.post("../controller/core/is_logout.php", {"is_logout": true}, function(data){
-          if (data.is_logout) alert("logging out!");
+          if (data.is_logout) window.location = "../controller/core/logout.php";
         },"json");
-    });
-
-    //make username required
-    $('#new_username').editable('option', 'validate', function(v) {
-       if(!v) return 'Required field!';
-    });
-
-    $('#password').editable('option', 'validate', function(v) {
-       if(!v) return 'Required field!';
-    });
-
-    $('#assembly-number').editable('option', 'validate', function(v) {
-       if(!v) return 'Required field!';
-    });
-
-    $('#revision').editable('option', 'validate', function(v) {
-       if(!v) return 'Required field!';
-    });
-
-    $('#sale-order').editable('option', 'validate', function(v) {
-       if(!v) return 'Required field!';
-    });
+    }); /*
+    
+    $('#is_logout').on('click',function(){
+            $.post("../controller/core/is_logout.php", {is_logout : true}, function(data){
+                console.log(data);
+                var arr = $.parseJSON(data);
+                console.log(arr);
+                if (arr.is_logout)
+                    window.location = "../controller/core/logout.php";
+            });
+    }); */
 });

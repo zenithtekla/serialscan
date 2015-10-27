@@ -1,8 +1,20 @@
 <?php
-require_once( 'config_inc.php' );
-$time_start = microtime(true);
-$mysqli = new mysqli($g_hostname, $g_db_username, $g_db_password,$g_database_name);
+    // A simple PHP script demonstrating how to connect to MySQL.
+    // Press the 'Run' button on the top to start the web server,
+    // then click the URL that is emitted to the Output tab of the console.
 
-if (!$mysqli) die('Connect failed: ' . mysqli_error());
-mysqli_select_db($mysqli, $g_database_name) or die('Error select: '.mysqli_error());
+    $servername = getenv('IP');
+    $username = getenv('C9_USER');
+    $password = "";
+    $database = "serialscan";
+    $dbport = 3306;
+
+    // Create connection
+    $mysqli = new mysqli($servername, $username, $password, $database, $dbport);
+
+    // Check connection
+    if ($mysqli->connect_error) {
+        die("Connection failed: " . $mysqli->connect_error);
+    } 
+    echo "Connected successfully (".$mysqli->host_info.")";
 ?>

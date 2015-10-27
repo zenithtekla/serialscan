@@ -5,12 +5,10 @@
 	<title>SerialScan app</title>
 	<link href="../css/default.css" rel="stylesheet">
 	<link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
-	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.10/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../plugin/jquery/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="../plugin/jqueryui/jquery-ui.min.js"></script>
   	<script src="../bootstrap/js/bootstrap.min.js"></script>
 
-  	<link href="../bootstrap/plugins/x-editable/dist/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
-	<script src="../bootstrap/plugins/x-editable/dist/bootstrap-editable/js/bootstrap-editable.min.js"></script>
 	<script src="../bootstrap/plugins/jQuery-Plugin-Js/jQuery.print.js"></script>
 	<script src="../js/main.js" type="text/javascript"></script>
 

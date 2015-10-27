@@ -4,17 +4,17 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Implementation of Alex's SyntaxHighlighter</title>
   <!-- WORKING VERSION, not best as the Evolved but just an okay result -->
-	<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
-  <link type="text/css" rel="stylesheet" href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
+	<script type="text/javascript" src="https://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css"/>
   <!-- Loading Brushes -->
-	<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js"></script>
-	<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushPhp.js"></script>
-	<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushSql.js"></script>
-	<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushPython.js"></script>
-	<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushRuby.js"></script>
-	<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
-	<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushPlain.js"></script>
-	<script type="text/javascript" src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushPowerShell.js"></script>
+	<script type="text/javascript" src="https://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js"></script>
+	<script type="text/javascript" src="https://alexgorbatchev.com/pub/sh/current/scripts/shBrushPhp.js"></script>
+	<script type="text/javascript" src="https://alexgorbatchev.com/pub/sh/current/scripts/shBrushSql.js"></script>
+	<script type="text/javascript" src="https://alexgorbatchev.com/pub/sh/current/scripts/shBrushPython.js"></script>
+	<script type="text/javascript" src="https://alexgorbatchev.com/pub/sh/current/scripts/shBrushRuby.js"></script>
+	<script type="text/javascript" src="https://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js"></script>
+	<script type="text/javascript" src="https://alexgorbatchev.com/pub/sh/current/scripts/shBrushPlain.js"></script>
+	<script type="text/javascript" src="https://alexgorbatchev.com/pub/sh/current/scripts/shBrushPowerShell.js"></script>
 
 	<script type="text/javascript">
 		SyntaxHighlighter.config.bloggerMode = true;
