@@ -16,5 +16,5 @@
     if ($mysqli->connect_error) {
         die("Connection failed: " . $mysqli->connect_error);
     } 
-    echo "Connected successfully (".$mysqli->host_info.")";
+    // echo "Connected successfully (".$mysqli->host_info.")";
 ?>

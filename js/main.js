@@ -19,7 +19,7 @@ $(document).ready(function() {
         $(this).parent().submit();
       } // main callback function
     }); */
-    // $("button").on('click',function(){
+
     $('#is_logout').on('click',function(){
         $.post("../controller/core/is_logout.php", {"is_logout": true}, function(data){
           if (data.is_logout) window.location = "../controller/core/logout.php";
