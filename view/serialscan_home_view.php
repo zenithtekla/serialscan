@@ -22,6 +22,8 @@
 	$t_assembly_number = $_SESSION['assembly_number'];
 	$t_revision = $_SESSION['revision'];
 	$t_sale_order = $_SESSION['sale_order'];
+	$t_format = $_SESSION['format'];
+	$t_format_example = $_SESSION['format_example'];
 	$t_access_level = $_SESSION['access_level'];
 	$t_CMOD_link = ($t_access_level>25) ? '<a href="cmod_view.php"><span class="label label-default no-print"><span class="glyphicon glyphicon-cog"></span>&nbspCMOD&nbsp<span class="glyphicon glyphicon-barcode"></span>&nbsp<span class="glyphicon glyphicon-qrcode"></span></span></a>' : '';
 	$t_virhe = '<strong>Warning! #ERROR</strong>_placeholder_001';
@@ -61,6 +63,14 @@
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
 				<span class="input-group-addon" id="sizing-addon1">Sale Order &nbsp<span class="required">*</span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
 				<span class="form-control">'.$t_sale_order.'</span>
+			</div>
+			<div id="general_input" class="input-group input-group-sm col-sm-4">
+				<span class="input-group-addon" id="sizing-addon1">Format &nbsp<span class="required">*</span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+				<span class="form-control">'.$t_format.'</span>
+			</div>
+			<div id="general_input" class="input-group input-group-sm col-sm-4">
+				<span class="input-group-addon" id="sizing-addon1">Format example &nbsp<span class="required">*</span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+				<span class="form-control">'.$t_format_example.'</span>
 			</div>
 		</div>
 
