@@ -38,7 +38,7 @@
 	<script src="../plugin/codemirror/mode/javascript/javascript.js"></script>
 	<script src="../plugin/codemirror/addon/display/fullscreen.js"></script>
 	<script src="../plugin/codemirror/keymap/sublime.js"></script>
-
+	<script src="../js/cmod_view.js" type="text/javascript"></script>
 </head>
 <body>
 	<?php
@@ -50,13 +50,12 @@
 			<h2>Query InputArea</h2>
 			<button id="toggleEditing" onclick="doToggle(\'foo\');">Toggle</button>
 			<div id="foo">Toggle displayed text.</div>
-
 			<pre id="output" class="cm-s-default"></pre><br>
-
+		<div id="querytulos"></div>
 		<div class="row">
 		    <div id="query" class="col-lg-6 input-xl margin-left">'?>
 				<form id="myForm">
-				<textarea id="code" name="code" class="field span12" cols="140" rows="10" placeholder="Enter a short synopsis">-- SQL Code Sample
+				<textarea id="mycode" name="code" class="field span12" cols="140" rows="10">-- SQL Code Sample
 				CREATE TABLE IF NOT EXISTS `seriscan_format` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   -- id = formatId
@@ -80,7 +79,7 @@
 				</p>
 
 		      <span class="input-group-btn">
-		        <button id="myBtn" onclick="doHighlight();" class="btn btn-success" type="button"><span class="glyphicon glyphicon-search"></span>&nbspQuery</button>
+		        <button id="myBtn" class="btn btn-success" type="button"><span class="glyphicon glyphicon-search"></span>&nbspQuery</button>
 		      </span>
 		    </div>
 		</div><!-- /row -->
@@ -91,55 +90,13 @@
 		      <span class="input-group-btn">
 		        <button id="haku-painike" class="btn btn-success" type="button"><span class="glyphicon glyphicon-search"></span>&nbspSearch</button>
 		      </span>
-		    </div><!-- /input-group -->
+		    </div><div id="hakusana"></div><div id="hakutulos"></div><!-- /input-group -->
 		</div><!-- /row -->
 	</div>
 	';
 	?>
 	<script>
-		document.getElementById('code').focus();
-		document.getElementById('code').select();
-		function doToggle(id) {
-		    var e= document.getElementById(id);
-		    if ( e.style.display == 'block' )
-		            e.style.display = 'none';
-		        else
-		            e.style.display = 'block';
-		}
-
-		function doHighlight() {
-		    CodeMirror.runMode("Running script:\n\n" + document.getElementById("code").value, "text/x-mariadb",
-		                     document.getElementById("output"));
-		    document.getElementById("myBtn").style.display = 'none';
-		    document.getElementById("myForm").style.display = 'none';
-		}
-
-		window.onload = function() {
-		  var mime = 'text/x-mariadb';
-		  // get mime type
-		  if (window.location.href.indexOf('mime=') > -1) {
-		    mime = window.location.href.substr(window.location.href.indexOf('mime=') + 5);
-		  }
-		  var editor = CodeMirror.fromTextArea(document.getElementById('code', 'exec_code'), {
-		    mode: mime,
-		    keyMap: "sublime",
-		    indentWithTabs: true,
-		    smartIndent: true,
-		    lineNumbers: true,
-		    autoCloseBrackets: true,
-		    matchBrackets : true,
-		    showCursorWhenSelecting: true,
-		    theme: "monokai",
-		    tabSize: 2,
-		    autofocus: true,
-		    extraKeys: {"Ctrl-Space": "autocomplete"},
-		    hintOptions: {tables: {
-		      users: {name: null, score: null, birthDate: null},
-		      countries: {name: null, population: null, size: null}
-		    }}
-		  });
-		  editor.execCommand("selectAll");
-		};
+		
 	</script>
 </body>
 </html>

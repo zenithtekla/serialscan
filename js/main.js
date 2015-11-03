@@ -5,6 +5,37 @@ $(document).ready(function() {
         timeout: 250
       });
     });
+    $("#scan_result").on({
+        mouseenter: function(){
+            $(this).css("background-color", "lightgray");
+        },  
+        mouseleave: function(){
+            $(this).css("background-color", "lightblue");
+        }, 
+        click: function(){
+            $(this).css("background-color", "yellow");
+        },
+        keyup: function(e){
+            e.preventDefault();
+            switch (e.which) {
+                case 13:
+                    $("#virhe_kuvaus").empty().append('  you press "Enter"!');
+                    $("#virhe_kuvaus").show(); // ajax to scan_proc.php
+                    setTimeout(function () { $("#virhe_kuvaus").hide(); }, 2000 );
+                    break;
+                case 1:
+                    $("#virhe_kuvaus").empty().append('  you have left-clicked!');
+                    $("#virhe_kuvaus").show();
+                    setTimeout(function () { $("#virhe_kuvaus").hide(); }, 2000 );
+                    break;
+                case 9:
+                    $("#virhe_kuvaus").empty().append('  you press "Tab"!');
+                    $("#virhe_kuvaus").show();
+                    setTimeout(function () { $("#virhe_kuvaus").hide(); }, 2000 );
+                    break;
+            }
+        }
+    });
     // autofocus on scan field
 /*    $('#scan_result').focus();
 

@@ -7,6 +7,8 @@
   function preventBack(){window.history.forward();}
   setTimeout("preventBack()", 0);
   window.onunload=function(){null};
+  
+  // intercept form submit and use Ajax http://stackoverflow.com/a/4069359
 </script>
 
 </head>
