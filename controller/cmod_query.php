@@ -8,8 +8,16 @@
     // echo( $qr );
     $result = $mysqli->query($qr);
     if ($result){
-        echo 'executing the query';
-        $result->close();
+        if (is_scalar($result))
+            echo json_encode($result, JSON_PRETTY_PRINT);
+        elseif (is_array($result))
+            print_r($result);
+            elseif (is_object($result))
+            {
+                foreach($result as $key=>$value){
+                    echo json_encode($value, JSON_PRETTY_PRINT);
+                }
+            }
         $mysqli->close();
     } else die($mysqli->error);
 }

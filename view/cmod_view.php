@@ -39,21 +39,32 @@
 	<script src="../plugin/codemirror/addon/display/fullscreen.js"></script>
 	<script src="../plugin/codemirror/keymap/sublime.js"></script>
 	<script src="../js/cmod_view.js" type="text/javascript"></script>
+	<style type="text/css">
+		#querytulos pre {
+		  max-height: 250px;
+		  overflow-y: auto;
+		  color:#3c763d;
+		}
+		#edelQ {
+		  max-height: 200px;
+		  overflow-y: auto;
+		  background-color: #F5F5F5;
+		}
+	</style>
 </head>
 <body>
 	<?php
-	echo '
+echo '
 	<div class="container">
-		<!-- Console Log -->
-		<article>
-
-			<h2>Query InputArea</h2>
-			<button id="toggleEditing" onclick="doToggle(\'foo\');">Toggle</button>
-			<div id="foo">Toggle displayed text.</div>
-			<pre id="output" class="cm-s-default"></pre><br>
-		<div id="querytulos"></div>
+	<!-- Console Log -->
+	<article>
+		<h3>dbQuery Console</h3>
+		<button id="toggleEdit" onclick="doToggle(\'edelQ\');">Toggle</button>
+		<div id="edelQ"><pre id="output" class="cm-s-default"></pre></div>
+		<br/>
+		<br/>
 		<div class="row">
-		    <div id="query" class="col-lg-6 input-xl margin-left">'?>
+		    <div id="query" class="col-lg-8 input-xl margin-left">'?>
 				<form id="myForm">
 				<textarea id="mycode" name="code" class="field span12" cols="140" rows="10">-- SQL Code Sample
 				CREATE TABLE IF NOT EXISTS `seriscan_format` (
@@ -66,8 +77,7 @@
 				</textarea>
 				</form>
 		<?php
-		echo '
-				<p><strong>MIME types defined:</strong>
+		echo '	<p><strong>MIME types defined:</strong>
 				    <code><a href="?mime=simplemode">simplemode</a></code>,
 				    <code><a href="?mime=text/x-sql">text/x-sql</a></code>,
 				    <code><a href="?mime=text/x-mysql">text/x-mysql</a></code>,
@@ -77,13 +87,11 @@
 		            <code><a href="?mime=text/x-mssql">text/x-mssql</a></code>,
 				    <code><a href="?mime=text/x-hive">text/x-hive</a></code>.
 				</p>
-
-		      <span class="input-group-btn">
-		        <button id="myBtn" class="btn btn-success" type="button"><span class="glyphicon glyphicon-search"></span>&nbspQuery</button>
-		      </span>
 		    </div>
+		    <span class="input-group-btn">
+		        <button id="myBtn" class="btn btn-success" type="button">Query&nbsp<span class="glyphicon glyphicon-menu-right"></span></button>
+		      </span>
 		</div><!-- /row -->
-		<br>
 		<div class="row">
 		    <div id="search" class="input-group">
 		      <input type="text" id="haku" class="form-control" placeholder="look for part">
@@ -92,6 +100,9 @@
 		      </span>
 		    </div><div id="hakusana"></div><div id="hakutulos"></div><!-- /input-group -->
 		</div><!-- /row -->
+		<br/>
+		<button id="toggleEditing" onclick="doToggle(\'querytulos\');">Toggle</button> display fetching queryResult
+		<div id="querytulos"></div>
 	</div>
 	';
 	?>

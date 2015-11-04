@@ -1,5 +1,3 @@
-$("#mycode").focus();
-$("#mycode").select();
 function doToggle(id) {
     var e= document.getElementById(id);
     if ( e.style.display == 'block' )
@@ -14,6 +12,8 @@ window.onload = function() {
   if (window.location.href.indexOf('mime=') > -1) {
     mime = window.location.href.substr(window.location.href.indexOf('mime=') + 5);
   }
+  $("#edelQ").hide();
+  $("#mycode").val($.trim($("#mycode").val()));
   var editor = CodeMirror.fromTextArea(document.getElementById('mycode', 'exec_code'), {
     mode: mime,
     keyMap: "sublime",
@@ -34,20 +34,22 @@ window.onload = function() {
   });
   editor.execCommand("selectAll");
 
-		
     function doQuery(){
-    var q = editor.getValue();
-    console.log(q);
+    $("#edelQ").show();
+    var q = editor.getValue().trim();
+    $("#output").append( q + "\n\n");
+    var r = $("#output").text();
+    CodeMirror.runMode( r, "text/x-mariadb", document.getElementById("output"));
+    $("#edelQ").animate({"scrollTop": $("#edelQ")[0].scrollHeight}, "slow");
+    
     $.ajax({
         type:'POST',
         url: '../controller/cmod_query.php',
         data: {qr: q},
         // contentType: "application/json; charset=utf-8"
     }). done(function(data){
-        console.log(data);
-        $('#querytulos').append("fetching queryResult: <strong>" + data + "</strong>");
-        CodeMirror.runMode("Running script:\n\n" + data, "text/x-mariadb",
-                     document.getElementById("output"));
+        $('#querytulos').empty().append("<pre>" + data + "</pre>");
+        // $('#querytulos').css({"max-height":150+'px'}, {"overflow-y":"auto"});
     }).fail(function(jqXHR, textStatus, errorThrown){
         console.log('ERROR', textStatus, errorThrown);
     });
@@ -81,7 +83,7 @@ function reloadSearch() {
                 url:'../controller/cmod_search.php',
                 data: {hakuQ : q}
             }). done(function(data){
-                $('#hakutulos').html("fetching Result: <strong>" + data + "</strong>");
+                $('#hakutulos').empty().html("fetching Result: <strong>" + data + "</strong>");
             })
             $('#hakusana').html("fetching...<i>" + q + "</i>");
             
