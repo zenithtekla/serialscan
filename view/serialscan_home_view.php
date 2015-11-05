@@ -75,25 +75,6 @@
 		</div>
 
 		<div id="main-wrapper" class="col-md-11 pull-right right-scroll">
-			<p>DataTable:</p>
-			<table class="table">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Serial Number</th>
-					 </tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>John</td>
-						<td>Doe</td>
-					</tr>
-					<tr>
-						<td>Mary</td>
-						<td>Moe</td>
-					</tr>
-				</tbody>
-			</table>
 		</div>
 
 		<div class="row no-print">

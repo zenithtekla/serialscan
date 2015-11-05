@@ -22,6 +22,27 @@ $(document).ready(function() {
                     $("#virhe_kuvaus").empty().append('  you press "Enter"!');
                     $("#virhe_kuvaus").show(); // ajax to scan_proc.php
                     setTimeout(function () { $("#virhe_kuvaus").hide(); }, 2000 );
+                    var q = $(this).val();
+                    // console.log(q);
+                    $.ajax({
+                        type:'POST',
+                        url: '../controller/scan_proc.php',
+                        data: { qr: q},
+                        //contentType: "application/json",
+                        // dataType: 'json'
+                    }).done(function(data){
+                        $("#virhe") .removeClass("alert-danger")
+                                    .addClass("alert-success");
+                        $("#virhe").empty().append("last scan: " + data);
+                        $("#main-wrapper")  .append( data + "<br/>")
+                                            .addClass("bg-success")
+                                            .css({  "max-height":"300px", 
+                                                    "overflow-y" : "auto" })
+                        .animate({"scrollTop": $("#main-wrapper")[0].scrollHeight}, "slow");
+                    }).fail(function(jqXHR,textStatus, errorThrown){
+                        $("#virhe").empty().append('!ERROR: ' + textStatus + ", " + errorThrown);
+                        console.log('ERROR', textStatus, errorThrown);
+                    });
                     break;
                 case 1:
                     $("#virhe_kuvaus").empty().append('  you have left-clicked!');

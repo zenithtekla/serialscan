@@ -1,5 +1,5 @@
 (function(){
-    var content = document.getElementById('content');
+    var content = document.getElementById('myData');
     var html = '';
     var data = {
         title: 'Serial_Scan webApp homePage',
@@ -18,7 +18,10 @@
             }
         ]
     };
-    
+    Handlebars.registerHelper('bold',function(text){
+        text = Handlebars.escapeExpression(text);
+       return Handlebars.SafeString('<b>'+text+'</b>');
+    });
     var template = Handlebars.compile(document.getElementById('url-template').innerHTML);
     content.innerHTML = template(data);
 })();

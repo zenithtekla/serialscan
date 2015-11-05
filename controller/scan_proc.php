@@ -1,4 +1,13 @@
-<div><a href="http://www.jensbits.com/2009/10/04/jquery-ajax-and-jquery-post-form-submit-examples-with-php/">Post processing</a></div>
-<?
-    echo '
-    ';
+<?php
+    require_once('../model/dbi_con.php');
+    
+    if(isset($_POST['qr']))
+{
+    $qr = $_POST['qr'];
+    if (is_scalar($qr))
+        echo $qr;
+        // echo json_encode($qr, JSON_PRETTY_PRINT);
+    
+} 
+// die (json_encode (array ('qr'=>'Your script worked fine')));
+?>

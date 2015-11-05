@@ -45,7 +45,7 @@ window.onload = function() {
     $.ajax({
         type:'POST',
         url: '../controller/cmod_query.php',
-        data: {qr: q},
+        data: {qr: q}
         // contentType: "application/json; charset=utf-8"
     }). done(function(data){
         $('#querytulos').empty().append("<pre>" + data + "</pre>");
