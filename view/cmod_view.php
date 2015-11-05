@@ -43,7 +43,8 @@
 		#querytulos pre {
 		  max-height: 250px;
 		  overflow-y: auto;
-		  color:#3c763d;
+		  color:green;
+		  background-color: #ddd;
 		}
 		#edelQ {
 		  max-height: 200px;
@@ -59,7 +60,7 @@ echo '
 	<!-- Console Log -->
 	<article>
 		<h3>dbQuery Console</h3>
-		<button id="toggleEdit" onclick="doToggle(\'edelQ\');">Toggle</button>
+		<button id="toggleEdit" onclick="doToggle(\'edelQ\');">Toggle</button><em>Script</em>
 		<div id="edelQ"><pre id="output" class="cm-s-default"></pre></div>
 		<br/>
 		<br/>

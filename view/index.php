@@ -1,12 +1,20 @@
 <head>
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <script type="text/javascript" src="../plugin/jquery/jquery-1.11.3.min.js"></script>
 </head>
 <body>
-<div class="container">
-<h3><div><a href="https://serialscan-cloud-zenithtekla.c9.io/view/front.php">Operating user Front page</a></div></h3><br/>
-<h3><div><a href="https://serialscan-cloud-zenithtekla.c9.io/view/cmod_enter.php">CMOD_entry_interface</a></div></h3><br/>
-<h3><div><a href="https://serialscan-cloud-zenithtekla.c9.io/view/cmod_view.php">CMOD_terminal</a></div></h3>
+    <section id="content"></section>
+    
+    <script src="../plugin/handlebars/handlebars-v4.0.4.js"></script>
+    <script id="url-template" type="text/template">
+    <div class="container">
+        {{#link}}
+            <h3><div><a href="{{url}}">{{label}}</a></div></h3><br/>
+        {{/link}}
+    </div>
+    </script>
+    <script src="../js/script.js"></script>
 </body>
-</div>
+
 <?php
 // header("refresh:2; url=front.php");
