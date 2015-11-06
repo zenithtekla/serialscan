@@ -44,7 +44,7 @@ window.onload = function() {
     
     $.ajax({
         type:'POST',
-        url: '../controller/cmod_query.php',
+        url: '../controller/cmod_console_query.php',
         data: {qr: q}
         // contentType: "application/json; charset=utf-8"
     }). done(function(data){
@@ -80,7 +80,7 @@ function reloadSearch() {
             // ajax fetch the data
             $.ajax({
                 type:'get',
-                url:'../controller/cmod_search.php',
+                url:'../controller/cmod_console_search.php',
                 data: {hakuQ : q}
             }). done(function(data){
                 $('#hakutulos').empty().html("fetching Result: <strong>" + data + "</strong>");

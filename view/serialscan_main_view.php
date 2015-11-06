@@ -165,7 +165,7 @@
 			logo_size: "border:0;max-width:40px;max-height:40px;",
 			logo_file: "../img/serialscan.png",
 			ent: 'Express Manufacturing Inc.',
-			cmod_link: '<a href="cmod_view.php"><span class="label label-default no-print"><span class="glyphicon glyphicon-cog"></span>&nbspCMOD&nbsp<span class="glyphicon glyphicon-barcode"></span>&nbsp<span class="glyphicon glyphicon-qrcode"></span></span></a>',
+			cmod_link: '<a href="cmod_console.php"><span class="label label-default no-print"><span class="glyphicon glyphicon-cog"></span>&nbspCMOD&nbsp<span class="glyphicon glyphicon-barcode"></span>&nbsp<span class="glyphicon glyphicon-qrcode"></span></span></a>',
 			dataObj:{
 				primary_key: jsonData.primary_key,
 			    assembly_number: jsonData.assembly_number,

@@ -22,7 +22,7 @@
     </div>
     </script>
     
-    <script src="../js/script.js"></script>
+    <script src="../js/index_script.js"></script>
 </body>
 
 <?php

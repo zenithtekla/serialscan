@@ -3,7 +3,6 @@
     var html = '';
     var data = {
         title: 'Serial_Scan webApp homePage',
-        tit: "$t_str",
         link: [
             {
                 url:'https://serialscan-cloud-zenithtekla.c9.io/view/front.php',
@@ -14,7 +13,7 @@
                 label:'CMOD_entry_interface'
             },
             {
-                url:'https://serialscan-cloud-zenithtekla.c9.io/view/cmod_view.php',
+                url:'https://serialscan-cloud-zenithtekla.c9.io/view/cmod_console.php',
                 label:'CMOD_terminal'
             }
         ]

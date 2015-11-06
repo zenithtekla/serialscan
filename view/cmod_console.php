@@ -38,7 +38,7 @@
 	<script src="../plugin/codemirror/mode/javascript/javascript.js"></script>
 	<script src="../plugin/codemirror/addon/display/fullscreen.js"></script>
 	<script src="../plugin/codemirror/keymap/sublime.js"></script>
-	<script src="../js/cmod_view.js" type="text/javascript"></script>
+	<script src="../js/cmod_console.js" type="text/javascript"></script>
 	<style type="text/css">
 		#querytulos pre {
 		  max-height: 250px;

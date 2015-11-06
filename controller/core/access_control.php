@@ -30,7 +30,7 @@
     	}
     	$result->free();
 		printf ( 'authentication completed successfully' );
-		header("Location: ../view/serialscan_home_view.php");
+		header("Location: ../view/serialscan_main_view.php");
 
 	} else { $_SESSION['is_auth'] = false; session_destroy(); printf( '<p class="red">authentication FAILED, wrong set of username and password</p>' ); header("refresh:2; url=../view/front.php");}
 

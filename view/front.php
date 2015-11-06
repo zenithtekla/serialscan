@@ -37,7 +37,7 @@ echo '
 	<div class="container">
 	<h2>USER ACCESS</h2>
 	<br/>
-	<form action="../controller/session_post.php" method="post">
+	<form action="../controller/main_post.php" method="post">
 		<div>Login name <span class="required">*</span> : 		<input type="text" name="username" required></div>
 		<div>password <span class="required">*</span>: 			<input type="password" name="password" required></div>
 		<div>sale_order <span class="required">*</span>: 		<input type="text" name="sale_order" required></div>
