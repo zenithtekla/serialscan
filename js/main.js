@@ -8,10 +8,10 @@ $(document).ready(function() {
     $("#scan_result").on({
         mouseenter: function(){
             $(this).css("background-color", "lightgray");
-        },  
+        },
         mouseleave: function(){
             $(this).css("background-color", "lightblue");
-        }, 
+        },
         click: function(){
             $(this).css("background-color", "yellow");
         },
@@ -19,9 +19,10 @@ $(document).ready(function() {
             e.preventDefault();
             switch (e.which) {
                 case 13:
-                    $("#virhe_kuvaus").empty().append('  you press "Enter"!');
+                    $("#virhe_kuvaus")  .addClass("alert-info")
+                                        .empty().append(' input saved with {Enter} key ! ');
                     $("#virhe_kuvaus").show(); // ajax to scan_proc.php
-                    setTimeout(function () { $("#virhe_kuvaus").hide(); }, 2000 );
+                    setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 2000 );
                     var q = $(this).val();
                     // console.log(q);
                     $.ajax({
@@ -34,25 +35,29 @@ $(document).ready(function() {
                         $("#virhe") .removeClass("alert-danger")
                                     .addClass("alert-success");
                         $("#virhe").empty().append("last scan: " + data);
-                        $("#main-wrapper")  .append( data + "<br/>")
+                        $("#log-wrapper")  .append( data + "<br/>")
                                             .addClass("bg-success")
-                                            .css({  "max-height":"300px", 
+                                            .css({  "max-height":"300px",
                                                     "overflow-y" : "auto" })
-                        .animate({"scrollTop": $("#main-wrapper")[0].scrollHeight}, "slow");
+                        .animate({"scrollTop": $("#log-wrapper")[0].scrollHeight}, "slow");
                     }).fail(function(jqXHR,textStatus, errorThrown){
-                        $("#virhe").empty().append('!ERROR: ' + textStatus + ", " + errorThrown);
+                        $("#virhe") .removeClass("alert-success")
+                                    .addClass("alert-danger")
+                                    .empty().append('!ERROR: ' + textStatus + ", " + errorThrown);
                         console.log('ERROR', textStatus, errorThrown);
                     });
                     break;
                 case 1:
-                    $("#virhe_kuvaus").empty().append('  you have left-clicked!');
+                    $("#virhe_kuvaus")  .addClass("alert-info")
+                                        .empty().append(' input saved with {left-clicked} key ! ');
                     $("#virhe_kuvaus").show();
-                    setTimeout(function () { $("#virhe_kuvaus").hide(); }, 2000 );
+                    setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 2000 );
                     break;
                 case 9:
-                    $("#virhe_kuvaus").empty().append('  you press "Tab"!');
+                    $("#virhe_kuvaus")  .addClass("alert-info")
+                                        .empty().append(' input saved with {Tab} key ! ');
                     $("#virhe_kuvaus").show();
-                    setTimeout(function () { $("#virhe_kuvaus").hide(); }, 2000 );
+                    setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 2000 );
                     break;
             }
         }
@@ -77,7 +82,7 @@ $(document).ready(function() {
           if (data.is_logout) window.location = "../controller/core/logout.php";
         },"json");
     }); /*
-    
+
     $('#is_logout').on('click',function(){
             $.post("../controller/core/is_logout.php", {is_logout : true}, function(data){
                 console.log(data);

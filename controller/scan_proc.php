@@ -6,6 +6,7 @@
     $qr = $_POST['qr'];
     if (is_scalar($qr))
         echo $qr;
+        // echo json_encode($qr, JSON_FORCE_OBJECT);
         // echo json_encode($qr, JSON_PRETTY_PRINT);
     
 } 

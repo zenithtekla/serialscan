@@ -3,6 +3,7 @@
     var html = '';
     var data = {
         title: 'Serial_Scan webApp homePage',
+        tit: "$t_str",
         link: [
             {
                 url:'https://serialscan-cloud-zenithtekla.c9.io/view/front.php',
@@ -20,8 +21,9 @@
     };
     Handlebars.registerHelper('bold',function(text){
         text = Handlebars.escapeExpression(text);
-       return Handlebars.SafeString('<b>'+text+'</b>');
+       return new Handlebars.SafeString('<h3>'+text+'</h3>');
     });
+
     var template = Handlebars.compile(document.getElementById('url-template').innerHTML);
     content.innerHTML = template(data);
 })();
