@@ -30,14 +30,13 @@
 	
 	session_start();
 	$_SESSION['is_auth'] = false;
-	$t_text = 'some text';
 	/* <input type="text" <?php echo helper_get_tab_index()?> name="username"> */
 echo '
 	<br/>
 	<div class="container">
 	<h2>USER ACCESS</h2>
 	<br/>
-	<form action="../controller/main_post.php" method="post">
+	<form action="../controller/front_post.php" method="post">
 		<div>Login name <span class="required">*</span> : 		<input type="text" name="username" required></div>
 		<div>password <span class="required">*</span>: 			<input type="password" name="password" required></div>
 		<div>sale_order <span class="required">*</span>: 		<input type="text" name="sale_order" required></div>
@@ -47,11 +46,6 @@ echo '
 	</form>
 	</div>
 ';
-
-/* echo "<br/><br/>";
-echo "print <p style='color:red;'>$t_text</p>";
-echo "<br/><br/>";
-echo 'print <p style="color:red;">$t_text</p>';*/
 ?>
 <script src="../js/front.js" type="text/javascript"></script>
 </body>

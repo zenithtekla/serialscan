@@ -10,6 +10,7 @@
 	$_SESSION['format'] = $_POST['format'];
 	$_SESSION['format_example'] = $_POST['format_example'];
 	$_SESSION['sale_order'] = $_POST['sale_order'];
+	$_SESSION['ss_key'] = 0;
 
 	echo 'username : ' . $_POST['username']. '<br/>';
 	echo 'password : ' . $_POST['password']. '<br/>';

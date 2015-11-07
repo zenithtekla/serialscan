@@ -1,0 +1,179 @@
+diff --git a/controller/front_post.php b/controller/front_post.php
+new file mode 100644
+index 0000000..661a8ec
+--- /dev/null
++++ b/controller/front_post.php
+@@ -0,0 +1,27 @@
++<?php
++	require_once('../model/dbi_con.php');
++	session_start();
++
++	$t_user_table = 'mantis_user_table';
++	require_once('core/date_time.php');
++	$_SESSION['time']     = getDateTime();
++	$_SESSION['username'] = $_POST['username'];
++	$_SESSION['password'] = $_POST['password'];
++	$_SESSION['format'] = $_POST['format'];
++	$_SESSION['format_example'] = $_POST['format_example'];
++	$_SESSION['sale_order'] = $_POST['sale_order'];
++	$_SESSION['ss_key'] = 0;
++
++	echo 'username : ' . $_POST['username']. '<br/>';
++	echo 'password : ' . $_POST['password']. '<br/>';
++	echo 'format : ' . $_POST['format']. '<br/>';
++	echo 'format_example : ' . $_POST['format_example']. '<br/>';
++	echo 'sale_order : ' . $_POST['sale_order']. '<br/>';
++	$t_username 		= $mysqli->real_escape_string($_SESSION['username']);
++	$t_password 		= $mysqli->real_escape_string($_SESSION['password']);
++		$t_password_copy 		= $t_password;
++	$t_format 	= $mysqli->real_escape_string($_SESSION['format']);
++	$t_format_example 		= $mysqli->real_escape_string($_SESSION['format_example']);
++	$t_sale_order 		= $mysqli->real_escape_string($_SESSION['sale_order']);
++	require_once('core/access_control.php');
++?>
+diff --git a/controller/main_post.php b/controller/main_post.php
+deleted file mode 100644
+index adf1fce..0000000
+--- a/controller/main_post.php
++++ /dev/null
+@@ -1,26 +0,0 @@
+-<?php
+-	require_once('../model/dbi_con.php');
+-	session_start();
+-
+-	$t_user_table = 'mantis_user_table';
+-	require_once('core/date_time.php');
+-	$_SESSION['time']     = getDateTime();
+-	$_SESSION['username'] = $_POST['username'];
+-	$_SESSION['password'] = $_POST['password'];
+-	$_SESSION['format'] = $_POST['format'];
+-	$_SESSION['format_example'] = $_POST['format_example'];
+-	$_SESSION['sale_order'] = $_POST['sale_order'];
+-
+-	echo 'username : ' . $_POST['username']. '<br/>';
+-	echo 'password : ' . $_POST['password']. '<br/>';
+-	echo 'format : ' . $_POST['format']. '<br/>';
+-	echo 'format_example : ' . $_POST['format_example']. '<br/>';
+-	echo 'sale_order : ' . $_POST['sale_order']. '<br/>';
+-	$t_username 		= $mysqli->real_escape_string($_SESSION['username']);
+-	$t_password 		= $mysqli->real_escape_string($_SESSION['password']);
+-		$t_password_copy 		= $t_password;
+-	$t_format 	= $mysqli->real_escape_string($_SESSION['format']);
+-	$t_format_example 		= $mysqli->real_escape_string($_SESSION['format_example']);
+-	$t_sale_order 		= $mysqli->real_escape_string($_SESSION['sale_order']);
+-	require_once('core/access_control.php');
+-?>
+diff --git a/js/front.js b/js/front.js
+index 130be92..e3baecd 100644
+--- a/js/front.js
++++ b/js/front.js
+@@ -43,7 +43,6 @@ $.ajax({
+                 '</div>'
+               ].join('\n'),
+               suggestion: Handlebars.compile("<div style='padding:6px'><b>{{value}}</b> - example : {{eg}} </div>"),
+-              // footer: "<b>Searched for "+ console.log($('input.typeahead.tt-input').val()+"</b>"
+               footer: function (data) {
+                 return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
+                 // return '<div>Searched for <strong>' + data.query + '</strong></div>';
+diff --git a/model/json_db/main_session_info.php b/model/json_db/main_session_info.php
+new file mode 100644
+index 0000000..7745c79
+--- /dev/null
++++ b/model/json_db/main_session_info.php
+@@ -0,0 +1,17 @@
++<?php
++    header('Content-Type: application/json');
++	session_start();
++
++	$t_arr = [];
++	$t_arr['assembly_number'] = $_SESSION['assembly_number'];
++	$t_arr['revision'] = $_SESSION['revision'];
++	$t_arr['sale_order'] = $_SESSION['sale_order'];
++	$t_arr['format'] = $_SESSION['format'];
++	$t_arr['format_example'] = $_SESSION['format_example'];
++	$t_arr['access_level'] = $_SESSION['access_level'];
++	$t_arr['username'] = $_SESSION['username'];
++	$t_arr['time'] = $_SESSION['time'];
++	$t_arr['ss_key'] = $_SESSION['ss_key'];
++
++	$jsonString = json_encode($t_arr, JSON_PRETTY_PRINT);
++	echo $jsonString;
+\ No newline at end of file
+diff --git a/model/json_db/test.html b/model/json_db/test.html
+new file mode 100644
+index 0000000..7d1a2b2
+--- /dev/null
++++ b/model/json_db/test.html
+@@ -0,0 +1,4 @@
++<head>
++    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
++    <script type="text/javascript" src="test.js"></script>
++</head>
+diff --git a/model/json_db/test.js b/model/json_db/test.js
+new file mode 100644
+index 0000000..3c1b822
+--- /dev/null
++++ b/model/json_db/test.js
+@@ -0,0 +1,19 @@
++
++    
++(function () {
++  var myData;
++  $(function(){
++        var myExtData;
++        function test() {
++          return $.getJSON('formats.php');
++        }
++        
++        $.when(test()).then(function (data) {
++          myData = data;
++          myExtData = data;
++          console.log(data);
++        });
++        console.log(myExtData);
++    });
++  console.log(myData);
++});
+\ No newline at end of file
+diff --git a/view/cmod_enter.php b/view/cmod_enter.php
+index 19d189f..433a5f4 100644
+--- a/view/cmod_enter.php
++++ b/view/cmod_enter.php
+@@ -27,4 +27,3 @@ echo '
+ 	</form>
+ 	</div>
+ ';
+-?>
+\ No newline at end of file
+diff --git a/view/front.php b/view/front.php
+index 6e939a5..009b49b 100644
+--- a/view/front.php
++++ b/view/front.php
+@@ -30,14 +30,13 @@
+ 	
+ 	session_start();
+ 	$_SESSION['is_auth'] = false;
+-	$t_text = 'some text';
+ 	/* <input type="text" <?php echo helper_get_tab_index()?> name="username"> */
+ echo '
+ 	<br/>
+ 	<div class="container">
+ 	<h2>USER ACCESS</h2>
+ 	<br/>
+-	<form action="../controller/main_post.php" method="post">
++	<form action="../controller/front_post.php" method="post">
+ 		<div>Login name <span class="required">*</span> : 		<input type="text" name="username" required></div>
+ 		<div>password <span class="required">*</span>: 			<input type="password" name="password" required></div>
+ 		<div>sale_order <span class="required">*</span>: 		<input type="text" name="sale_order" required></div>
+@@ -47,11 +46,6 @@ echo '
+ 	</form>
+ 	</div>
+ ';
+-
+-/* echo "<br/><br/>";
+-echo "print <p style='color:red;'>$t_text</p>";
+-echo "<br/><br/>";
+-echo 'print <p style="color:red;">$t_text</p>';*/
+ ?>
+ <script src="../js/front.js" type="text/javascript"></script>
+ </body>

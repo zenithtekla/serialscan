@@ -43,7 +43,6 @@ $.ajax({
                 '</div>'
               ].join('\n'),
               suggestion: Handlebars.compile("<div style='padding:6px'><b>{{value}}</b> - example : {{eg}} </div>"),
-              // footer: "<b>Searched for "+ console.log($('input.typeahead.tt-input').val()+"</b>"
               footer: function (data) {
                 return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
                 // return '<div>Searched for <strong>' + data.query + '</strong></div>';
