@@ -77,7 +77,8 @@ $(document).ready(function() {
       } // main callback function
     }); */
 
-    $('#is_logout').on('click',function(){
+    $('#is_logout').on('click',function(e){
+        e.preventDefault();
         $.post("../controller/core/is_logout.php", {"is_logout": true}, function(data){
           if (data.is_logout) window.location = "../controller/core/logout.php";
         },"json");
