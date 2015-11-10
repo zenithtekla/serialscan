@@ -9,24 +9,6 @@
 
 -- --------------------------------------------------------
 --
-
-CREATE TABLE IF NOT EXISTS `seriscan_customers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `contactLastName` varchar(50) NOT NULL,
-  `contactFirstName` varchar(50) NOT NULL,
-  `phone` varchar(50) NOT NULL,
-  `addressLine1` varchar(50) NOT NULL,
-  `addressLine2` varchar(50) DEFAULT NULL,
-  `city` varchar(50) NOT NULL,
-  `state` varchar(50) DEFAULT NULL,
-  `postalCode` varchar(15) DEFAULT NULL,
-  `country` varchar(50) NOT NULL,
-  `sale_order` varchar(60) NOT NULL,
-  `assembly_number` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
-
 CREATE TABLE IF NOT EXISTS `mantis_user_table` (
   `id` int(10) unsigned NOT NULL,
   `username` varchar(32) NOT NULL DEFAULT '',
@@ -44,44 +26,38 @@ CREATE TABLE IF NOT EXISTS `mantis_user_table` (
   `date_created` int(10) unsigned NOT NULL DEFAULT '1'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `seriscan_customer` (
+  `customer_id` int(19) NOT NULL AUTO_INCREMENT,
+  `name` varchar(60) NOT NULL,
+  PRIMARY KEY (`customer_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 --
-
 CREATE TABLE IF NOT EXISTS `seriscan_assembly` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  -- id = assemblyId
-  `formatId` int(11) NOT NULL,
+  `assembly_id` int(19) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(19) NOT NULL,
   `assembly_number` varchar(20) NOT NULL,
-  -- assembly_number = data entry that user enters
   `revision` varchar(10) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`assembly_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
 CREATE TABLE IF NOT EXISTS `seriscan_format` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  -- id = formatId
+  `format_id` int(19) NOT NULL AUTO_INCREMENT,
   `format` varchar(60) NOT NULL,
   `format_example` varchar(60) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
-
-CREATE TABLE IF NOT EXISTS `seriscan_sale_order` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  -- id = sale_order_id
-  `assemblyId` int(11) NOT NULL,
-  `sale_order` varchar(60) NOT NULL,
-  -- sale_order = data entry that user enters
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`format_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
 CREATE TABLE IF NOT EXISTS `seriscan_serial` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `sale_order_id` varchar(40) NOT NULL,
-  `serial_number` varchar(60) NOT NULL,
+  `serial_id` int(19) NOT NULL AUTO_INCREMENT,
+  `assembly_id` int(19) NOT NULL,
+  `customer_id` int(19) NOT NULL,
+  `sale_order_id` varchar(250) NOT NULL,
+  `serial_number` varchar(250) NOT NULL,
   -- criteria:  serial_number, assembly_number, and  revision === unique for acceptance.
   --            serial_number matches format table.
-  `user_id` varchar(20) NOT NULL,
+  `user_id` int(19) NOT NULL,
   `time` TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`serial_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 
 INSERT INTO `mantis_user_table` (`id`, `username`, `realname`, `email`, `password`, `enabled`, `protected`, `access_level`, `login_count`, `lost_password_request_count`, `failed_login_count`, `cookie_string`, `last_visit`, `date_created`) VALUES
