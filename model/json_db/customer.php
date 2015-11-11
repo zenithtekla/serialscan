@@ -3,8 +3,15 @@ header('Content-Type: application/json');
 require_once('../dbi_con.php');
 
 	$t_customer_table = 'seriscan_customer';
-	$qr = "SELECT customer_id, customer_name FROM $t_customer_table";
-	// query looping to remove customer_id that does not result in any assemble
+	$t_assembly_table = 'seriscan_assembly';
+	$qr = "	SELECT seriscan_customer.customer_id, customer_name 
+		   	FROM seriscan_customer
+	 	INNER JOIN seriscan_assembly
+	 	ON 
+	 		seriscan_customer.customer_id = seriscan_assembly.customer_id
+	 	ORDER BY 
+	 		seriscan_customer.customer_name";
+
 	$result = $mysqli->query($qr) or die($mysqli->error);
 	$num_rows = $result->num_rows;
 		
