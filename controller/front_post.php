@@ -7,6 +7,8 @@
 	$_SESSION['time']     = getDateTime();
 	$_SESSION['username'] = $_POST['username'];
 	$_SESSION['password'] = $_POST['password'];
+	$_SESSION['assembly'] = $_POST['assembly'];
+	$_SESSION['revision'] = $_POST['revision'];
 	$_SESSION['format'] = $_POST['format'];
 	$_SESSION['format_example'] = $_POST['format_example'];
 	$_SESSION['sale_order'] = $_POST['sale_order'];

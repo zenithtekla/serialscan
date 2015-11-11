@@ -2,8 +2,8 @@
 header('Content-Type: application/json');
 require_once('../dbi_con.php');
 
-	$t_customer_table = 'seriscan_customers';
-	$qr = "SELECT name, assembly_number FROM $t_customer_table";
+	$t_customer_table = 'seriscan_customer';
+	$qr = "SELECT customer_id, customer_name FROM $t_customer_table";
 	$result = $mysqli->query($qr);
 	$t_format_arr = [];
 	if ($result){

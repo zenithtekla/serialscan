@@ -1,3 +1,6 @@
+# Ignore all json files upon commit
+json/*.json
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

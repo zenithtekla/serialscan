@@ -6,26 +6,23 @@
 	$t_user_table = 'mantis_user_table';
 	$t_format_table = 'seriscan_format';
 	$t_assembly_table = 'seriscan_assembly';
+	$t_customer_table = 'seriscan_customer';
 
 	require_once('core/date_time.php');
 	$_SESSION['time']     = getDateTime();
-
+	
+	$t_customer_name 	= $mysqli->real_escape_string($_POST['customer_name']);
 	$t_assembly_number 	= $mysqli->real_escape_string($_POST['assembly_number']);
 	$t_revision 		= $mysqli->real_escape_string($_POST['revision']);
-	$t_format 		= $mysqli->real_escape_string($_POST['format']);
-	$t_format_example 		= $mysqli->real_escape_string($_POST['format_example']);
+	$t_format 			= $mysqli->real_escape_string($_POST['format']);
+	$t_format_example 	= $mysqli->real_escape_string($_POST['format_example']);
 
+//-----Format instantiation	
 	// instantiate new object as a new instance of the Format class.
 	$t_new_format = new Format($t_format,$t_format_example);
 	//markup
 	$m_format = $t_new_format->getFormat();
 	$m_format_example = $t_new_format->getFormatExample();
-		// indexing JSON data for key-value pair [format]-[format_example]
-		$t_format_data = json_encode($t_new_format);
-		echo $t_format_data . "<br />";
-		$fp = fopen('../json/format_data.json', 'a') or die("Unable to open file!");
-	    fwrite($fp, "\n". $t_format_data);
-	    fclose($fp);
 
     // move to input_api.php
 	function createScanFormat($p_format, $p_format_example){
@@ -42,30 +39,62 @@
 	}
 	// calling
 	$t_formatId = createScanFormat($m_format, $m_format_example); // should be the same for using $t_format, $t_format_example : testing needed!
-
-	// now that formatId is ready, querying the rest to the assembly table
-	$t_new_assembly = new Assembly( $t_formatId, $t_assembly_number , $t_revision );
-
-		// indexing JSON data for key-value pair [assembly_number]-[format]
-		$t_assembly_data = json_encode($t_new_assembly); // unsafe encoding, 3 values not a pair!
-		echo $t_assembly_data . "<br />";
-		$fp = fopen('../json/format_example_data.json', 'a') or die("Unable to open file!");
-	    fwrite($fp, "\n". $t_assembly_data);
+		
+		// indexing JSON data for key-value pair [format]-[format_example]
+		$t_format_data = json_encode($t_new_format);
+		echo "<br />" . $t_format_data . "<br />";
+		$fp = fopen('../json/format_data.json', 'a') or die("Unable to open file!");
+	    fwrite($fp, "\n". $t_format_data);
 	    fclose($fp);
 
-	function createAssembly($p_formatId, $p_assembly_number, $p_revision){
+//------Customer instantiation	
+	$t_new_customer = new Customer($t_customer_name);
+
+	function createCustomer($p_customer_name){
+		GLOBAL $mysqli;
+		GLOBAL $t_customer_table; // accessing global variable
+		$qr = "INSERT INTO $t_customer_table
+						(customer_name)
+						VALUE ('$p_customer_name')";
+		// db_param(); db_query_bound( $query, Array( $p_format, $p_format_example) );
+		$result = $mysqli->query($qr) or die($mysqli->error);
+		echo "New record created successfully. Last inserted ID is: " . $mysqli->insert_id;
+		return $mysqli->insert_id; // customerId
+	}
+	$t_customerId = createCustomer($t_new_customer->getCustomerName());
+
+		$t_customer_data = json_encode($t_new_customer);
+		echo "<br/>". $t_customer_data . "<br/>";
+		$fp = fopen('../json/customer_data.json', 'a') or die("Unable to open file!");
+	    fwrite($fp, "\n". $t_customer_data);
+	    fclose($fp);
+
+//-----Assembly instantiation
+	// now that customerId is ready, querying the rest to the assembly table
+	$t_new_assembly = new Assembly( $t_customerId, $t_assembly_number , $t_revision );
+
+	function createAssembly($p_customerId, $p_assembly_number, $p_revision){
 		GLOBAL $mysqli;
 		GLOBAL $t_assembly_table; // accessing global variable
-		$qr = "INSERT INTO $t_assembly_table
-						(formatId, assembly_number, revision)
-						VALUE
-						( " . $p_formatId . ',' . $p_assembly_number . ',' . $p_revision .')';
+		$qr = sprintf("INSERT INTO $t_assembly_table " .
+						" (assembly_id, customer_id, assembly_number, revision ) " .
+						" VALUES (NULL, '%s', '%s', '%s' );",
+								$p_customerId,
+								$p_assembly_number,
+								$p_revision);
 		$result = $mysqli->query($qr) or die($mysqli->error);
 		echo "New record created successfully. Last inserted ID is: " . $mysqli->insert_id;
 		return $mysqli->insert_id; // assemblyId
 	}
 
-	$t_assemblyId = createAssembly($t_new_assembly->getFormatId(), $t_new_assembly->getAssemblyNumber(), $t_new_assembly->getRevision() );
+	$t_assemblyId = createAssembly($t_new_assembly->getCustomerId(), $t_new_assembly->getAssemblyNumber(), $t_new_assembly->getRevision() );
+	
+		// indexing JSON data for key-value pair [assembly_number]-[format]
+		$t_assembly_data = json_encode($t_new_assembly); // unsafe encoding, 3 values not a pair!
+		echo "<br/>". $t_assembly_data . "<br/>";
+		$fp = fopen('../json/assembly_data.json', 'a') or die("Unable to open file!");
+	    fwrite($fp, "\n". $t_assembly_data);
+	    fclose($fp);
 
 	echo '<h3><a href="../view/cmod_enter.php">Enter new format</a></h3><br><br>';
 	// now that formatId is ready, awaiting user's input of sale_order and querying the rest to the sale_order table

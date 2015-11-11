@@ -1,20 +1,39 @@
 <?php
+class Customer {
+	public $customer_name = "";
+	function __construct($customer_name){
+		$this->customer_name = $customer_name;
+	}
+	public function setCustomerName($val){
+		$this->customer_name = $val;
+	}
+	public function getCustomerName(){
+		return $this->customer_name;
+	}
+}
+
 class Assembly {
-	public $format_id;
+	public $customer_id;
 	public $assembly_number = "";
 	public $revision = "";
-	function __construct($format_id, $assembly_number, $revision){
-		$this->format_id = $format_id;
+	function __construct($customer_id, $assembly_number, $revision){
+		$this->customer_id = $customer_id;
 		$this->assembly_number = $assembly_number;
 		$this->revision = $revision;
 	}
 	function __destruct(){}
-
-	public function setFormatId($val){
-		$this->format_id = $val;
+	
+	public function __toString()
+	{
+		echo "Output with the __toString method: ";
+		return $this->getCustomerId();
 	}
-	public function getFormatId(){
-		return $this->format_id;
+
+	public function setCustomerId($val){
+		$this->customer_id = $val;
+	}
+	public function getCustomerId(){
+		return $this->customer_id;
 	}
 
 	public function setAssemblyNumber($val){
@@ -35,6 +54,16 @@ class Assembly {
 		return isset( $this->{$name} );
 	} */
 }
+
+/*// Create a new object
+$obj = new Assembly(1,2,'cvx','cvs');
+$obj->format_id ='007';
+ 
+// Output the object as a string
+echo $obj;
+
+// Destroy the object
+unset($obj);*/
 
 // $t_new_assembly = new Assembly($t_formatId, $t_assembly_number, $t_revision);
 
@@ -64,46 +93,38 @@ class Format {
 
 // $t_format = new Format($t_format, $t_format_example);
 
-class SaleOrder {
+class Serial {
 	public $assembly_id;
-	public $sale_order = "";
-	function __construct($assembly_id, $sale_order){
+	public $customer_id;
+	public $sale_order_id = "";
+	public $serial_number = "";
+	public $user_id = "";
+	public $time = "";
+	function __construct($assembly_id, $customer_id, $sale_order_id, $serial_number, $user_id, $time = ""){
 		$this->assembly_id = $assembly_id;
-		$this->sale_order = $sale_order;
+		$this->customer_id = $customer_id;
+		$this->sale_order_id = $sale_order_id;
+		$this->serial_number = $serial_number;
+		$this->user_id = $user_id;
+		if (!isset($this->time))
+			$this->time = new DateTime("now");
+		else $this->time = $time;
 	}
 	function __destruct(){}
-
+	
 	public function setAssemblyId($val){
 		$this->assembly_id = $val;
 	}
 	public function getAssemblyId(){
 		return $this->assembly_id;
 	}
-
-	public function setSaleOrder($val){
-		$this->sale_order = $val;
+	
+	public function setCustomerId($val){
+		$this->customer_id = $val;
 	}
-	public function getSaleOrder(){
-		return $this->sale_order;
+	public function getCustomerId(){
+		return $this->customer_id;
 	}
-}
-
-// $t_sale_order = new SaleOrder($t_assemblyId, $sale_order);
-
-class Serial {
-	public $sale_order_id = "";
-	public $serial_number = "";
-	public $user_id = "";
-	public $time = "";
-	function __construct($sale_order_id, $serial_number, $user_id, $time = ""){
-		$this->sale_order_id = $sale_order_id;
-		$this->serial_number = $serial_number;
-		$this->user_id = $user_id;
-		if (!isset($this->time))
-			$this->time = new DateTime("now");
-		$this->time = $time;
-	}
-	function __destruct(){}
 
 	public function setSaleOrderId($val){
 		$this->sale_order_id = $val;
@@ -133,5 +154,5 @@ class Serial {
 		return $this->time;
 	}
 }
-// $t_serial = new Serial($t_sale_order_id, $t_serial_number, $t_user_id, $t_time);
+// $t_serial = new Serial($assembly_id, $customer_id, $t_sale_order_id, $t_serial_number, $t_user_id, $t_time);
 //

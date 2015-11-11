@@ -32,7 +32,6 @@
 </style>
 </head>
 <body>
-	
 <?php
 	/* $host  = $_SERVER['HTTP_HOST'];
 	$uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
@@ -41,6 +40,7 @@
 	
 	session_start();
 	$_SESSION['is_auth'] = false;
+	echo $_SESSION['is_auth'];
 	/* <input type="text" <?php echo helper_get_tab_index()?> name="username"> */
 ?>
 	<section id="myData"></section>

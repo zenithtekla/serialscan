@@ -19,6 +19,7 @@ echo '
 	<h2>CMOD ENTER</h2>
 	<br/>
 	<form action="../controller/cmod_enter_post.php" method="post">
+		<p>customer_name <span class="required">*</span>: 	<input type="text" name="customer_name"></p>
 		<p>assembly_number <span class="required">*</span>: 	<input type="text" name="assembly_number"></p>
 		<p>revision <span class="required">*</span>: 			<input type="text" name="revision"></p>
 		<p>format <span class="required">*</span>: 			<input type="text" name="format"></p>

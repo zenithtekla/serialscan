@@ -35,7 +35,7 @@
 
 $.ajax({
   dataType: "json",
-  url: "../model/json_db/customers.php"})
+  url: "../model/json_db/customer.php"})
   .done( function(data) {
     /*    $.each(data,function(i,v){
             console.log(v.format);
@@ -54,7 +54,7 @@ $.ajax({
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         // `data` is an array of country names defined in "The Basics"
         local: $.map(data, function(obj) { 
-            return { value : obj.name, eg: obj.assembly_number };
+            return { value : obj.customer_name, eg: obj.customer_id };
         }),
         limit: 10
       });
@@ -76,7 +76,7 @@ $.ajax({
                   'Result not found',
                 '</div>'
               ].join('\n'),
-              suggestion: Handlebars.compile("<div style='padding:6px'><b>{{value}}</b> - assembly_number : {{eg}} </div>"),
+              suggestion: Handlebars.compile("<div style='padding:6px'>{{value}}</div>"),
               footer: function (data) {
                 return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
                 // return '<div>Searched for <strong>' + data.query + '</strong></div>';
@@ -95,13 +95,13 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
   console.log($('input:hidden').val());
   console.log('Selection: ' + JSON.stringify(suggestion));
   
-  var myData = JSON.stringify({"assembly_number": suggestion.eg});
+  var myData = JSON.stringify({"customer_id": suggestion.eg});
   $("#result").append(myData + "<br/>");
 
   $.ajax({
     type:"POST",
     url: "../model/json_db/assembly.php",
-    data: {"assembly_number": suggestion.eg},
+    data: {"customer_id": suggestion.eg},
     dataType: 'json',
   })
   .done( function(data) {
@@ -118,12 +118,12 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
       // constructs the suggestion engine
       var engine = new Bloodhound({
         datumTokenizer: function (datum) {
-          return Bloodhound.tokenizers.whitespace(datum.eg);
+          return Bloodhound.tokenizers.whitespace(datum.value);
         },
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         // `data` is an array of country names defined in "The Basics"
         local: $.map(data, function(obj) { 
-            return { value : obj.formatId, eg: obj.revision };
+            return { value : obj.assembly_number, eg: obj.revision };
         }),
         limit: 10
       });
@@ -134,7 +134,7 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
       // Instantiate the Typeahead UI
       $('#assembly .typeahead').typeahead(null, {
           name: 'data',
-          displayKey: 'eg',
+          displayKey: 'value',
           hint: true,
           highlight: true,
           minLength: 1,
@@ -145,7 +145,7 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
                   'Result not found',
                 '</div>'
               ].join('\n'),
-              suggestion: Handlebars.compile("<div style='padding:6px'><b>{{eg}}</b> - format : {{value}} </div>"),
+              suggestion: Handlebars.compile("<div style='padding:6px'><b>{{value}}</b> - revision : {{eg}} </div>"),
               footer: function (data) {
                 return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
                 // return '<div>Searched for <strong>' + data.query + '</strong></div>';

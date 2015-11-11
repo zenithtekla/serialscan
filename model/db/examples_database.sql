@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `mantis_user_table` (
 
 CREATE TABLE IF NOT EXISTS `seriscan_customer` (
   `customer_id` int(19) NOT NULL AUTO_INCREMENT,
-  `name` varchar(60) NOT NULL,
+  `customer_name` varchar(60) NOT NULL,
   PRIMARY KEY (`customer_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
 --
