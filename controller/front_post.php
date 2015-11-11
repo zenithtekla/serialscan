@@ -7,7 +7,7 @@
 	$_SESSION['time']     			= getDateTime();
 	$_SESSION['username'] 			= $mysqli->real_escape_string($_POST['username']);
 	$_SESSION['password'] 			= $mysqli->real_escape_string($_POST['password']);
-	$_SESSION['assembly_number'] 	= $mysqli->real_escape_string($_POST['assembly_number']);
+	$_SESSION['assembly'] 			= $mysqli->real_escape_string($_POST['assembly']);
 	$_SESSION['revision'] 			= $mysqli->real_escape_string($_POST['revision']);
 	$_SESSION['format'] 			= $mysqli->real_escape_string($_POST['format']);
 	$_SESSION['format_example'] 	= $mysqli->real_escape_string($_POST['format_example']);

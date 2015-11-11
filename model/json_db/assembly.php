@@ -7,14 +7,20 @@ require_once('../dbi_con.php');
 		$t_customer_id = $_POST["customer_id"];
 		$qr = "SELECT * FROM $t_assembly_table WHERE customer_id='$t_customer_id'";
 		// $qr = "SELECT formatId, revision FROM $t_assembly_table WHERE customer_id=".$t_customer_id;
-		$result = $mysqli->query($qr);
-		if ($result->num_rows){
+		$result = $mysqli->query($qr) or die($mysqli->error);
+		$num_rows = $result->num_rows;
+		
+		if ($num_rows){
 			$t_format_arr = [];
 			while ( ($row=$result->fetch_assoc()) !== null ) {
 				$t_format_arr[] = $row;
 			}
-		} else die('Invalid query: ' . mysql_error());
+			$result->free();
+		}
+		
+	    /* close connection */
+		$mysqli->close();
+		
 		$jsonString = json_encode($t_format_arr, JSON_PRETTY_PRINT);
 		echo $jsonString;
-		// $mysqli->close();
 	}
