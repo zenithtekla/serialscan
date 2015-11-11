@@ -152,6 +152,7 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
               }
           }
       });
+      $('#assembly .typeahead').focus();
   })
   .fail(function(jqXHR, textStatus, errorThrown){
     console.log(jqXHR, textStatus, errorThrown);
@@ -160,6 +161,8 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
 
 $('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
   console.log('Selection: ' + JSON.stringify(suggestion));
+  var myData = JSON.stringify({"revision": suggestion.eg});
+  $("#result").append(myData + "<br/>");
 });
 /*var $t_format_example = $( this ).find( 'input:hidden' );
   var foo = $('input.typeahead.tt-input').val();

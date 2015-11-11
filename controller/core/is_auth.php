@@ -6,7 +6,7 @@ session_start();
 // If test fails, send the user to login.php and prevent rest of page being shown.
 if (!isset($_SESSION["is_auth"]) || !isset($_SESSION["access_level"])) {
 	session_destroy();
-	printf( '<p class="red">Access NOT authenticated</p>' ); header("refresh:2; url=../view/front.php");
+	printf( '<p class="red" style="color:red">Access NOT authenticated</p>' ); header("refresh:2; url=../view/front.php");
 	exit;
 }
 else if (isset($_REQUEST['logout']) && $_REQUEST['logout'] == "true") {

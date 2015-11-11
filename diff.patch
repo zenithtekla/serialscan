@@ -1,103 +1,113 @@
+diff --git a/controller/core/is_auth.php b/controller/core/is_auth.php
+index d2a0b2a..531dfec 100644
+--- a/controller/core/is_auth.php
++++ b/controller/core/is_auth.php
+@@ -6,7 +6,7 @@ session_start();
+ // If test fails, send the user to login.php and prevent rest of page being shown.
+ if (!isset($_SESSION["is_auth"]) || !isset($_SESSION["access_level"])) {
+ 	session_destroy();
+-	printf( '<p class="red">Access NOT authenticated</p>' ); header("refresh:2; url=../view/front.php");
++	printf( '<p class="red" style="color:red">Access NOT authenticated</p>' ); header("refresh:2; url=../view/front.php");
+ 	exit;
+ }
+ else if (isset($_REQUEST['logout']) && $_REQUEST['logout'] == "true") {
+diff --git a/controller/front_post.php b/controller/front_post.php
+index e7fc426..4ccc810 100644
+--- a/controller/front_post.php
++++ b/controller/front_post.php
+@@ -4,26 +4,26 @@
+ 
+ 	$t_user_table = 'mantis_user_table';
+ 	require_once('core/date_time.php');
+-	$_SESSION['time']     = getDateTime();
+-	$_SESSION['username'] = $_POST['username'];
+-	$_SESSION['password'] = $_POST['password'];
+-	$_SESSION['assembly'] = $_POST['assembly'];
+-	$_SESSION['revision'] = $_POST['revision'];
+-	$_SESSION['format'] = $_POST['format'];
+-	$_SESSION['format_example'] = $_POST['format_example'];
+-	$_SESSION['sale_order'] = $_POST['sale_order'];
+-	$_SESSION['ss_key'] = 0;
++	$_SESSION['time']     			= getDateTime();
++	$_SESSION['username'] 			= $mysqli->real_escape_string($_POST['username']);
++	$_SESSION['password'] 			= $mysqli->real_escape_string($_POST['password']);
++	$_SESSION['assembly_number'] 	= $mysqli->real_escape_string($_POST['assembly_number']);
++	$_SESSION['revision'] 			= $mysqli->real_escape_string($_POST['revision']);
++	$_SESSION['format'] 			= $mysqli->real_escape_string($_POST['format']);
++	$_SESSION['format_example'] 	= $mysqli->real_escape_string($_POST['format_example']);
++	$_SESSION['sale_order'] 		= $mysqli->real_escape_string($_POST['sale_order']);
++	$_SESSION['customer'] 			= $mysqli->real_escape_string($_POST['customer']);
++	$_SESSION['ss_key'] 			= 0;
+ 
+ 	echo 'username : ' . $_POST['username']. '<br/>';
+ 	echo 'password : ' . $_POST['password']. '<br/>';
+ 	echo 'format : ' . $_POST['format']. '<br/>';
+ 	echo 'format_example : ' . $_POST['format_example']. '<br/>';
+-	echo 'sale_order : ' . $_POST['sale_order']. '<br/>';
+-	$t_username 		= $mysqli->real_escape_string($_SESSION['username']);
+-	$t_password 		= $mysqli->real_escape_string($_SESSION['password']);
+-		$t_password_copy 		= $t_password;
+-	$t_format 	= $mysqli->real_escape_string($_SESSION['format']);
+-	$t_format_example 		= $mysqli->real_escape_string($_SESSION['format_example']);
+-	$t_sale_order 		= $mysqli->real_escape_string($_SESSION['sale_order']);
++	
++	$t_username 			= $_SESSION['username'];
++	$t_password 			= $_SESSION['password'];
++		$t_password_copy 	= $t_password;
++	$t_format 				= $_SESSION['format'];
++	$t_format_example 		= $_SESSION['format_example'];
+ 	require_once('core/access_control.php');
+ ?>
 diff --git a/js/front.js b/js/front.js
-index 0122e49..f78c03e 100644
+index f78c03e..62316b3 100644
 --- a/js/front.js
 +++ b/js/front.js
-@@ -35,7 +35,7 @@
- 
- $.ajax({
-   dataType: "json",
--  url: "../model/json_db/customers.php"})
-+  url: "../model/json_db/customer.php"})
-   .done( function(data) {
-     /*    $.each(data,function(i,v){
-             console.log(v.format);
-@@ -54,7 +54,7 @@ $.ajax({
-         queryTokenizer: Bloodhound.tokenizers.whitespace,
-         // `data` is an array of country names defined in "The Basics"
-         local: $.map(data, function(obj) { 
--            return { value : obj.name, eg: obj.assembly_number };
-+            return { value : obj.customer_name, eg: obj.customer_id };
-         }),
-         limit: 10
+@@ -152,6 +152,7 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
+               }
+           }
        });
-@@ -76,7 +76,7 @@ $.ajax({
-                   'Result not found',
-                 '</div>'
-               ].join('\n'),
--              suggestion: Handlebars.compile("<div style='padding:6px'><b>{{value}}</b> - assembly_number : {{eg}} </div>"),
-+              suggestion: Handlebars.compile("<div style='padding:6px'>{{value}}</div>"),
-               footer: function (data) {
-                 return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
-                 // return '<div>Searched for <strong>' + data.query + '</strong></div>';
-@@ -95,13 +95,13 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
-   console.log($('input:hidden').val());
-   console.log('Selection: ' + JSON.stringify(suggestion));
-   
--  var myData = JSON.stringify({"assembly_number": suggestion.eg});
-+  var myData = JSON.stringify({"customer_id": suggestion.eg});
-   $("#result").append(myData + "<br/>");
- 
-   $.ajax({
-     type:"POST",
-     url: "../model/json_db/assembly.php",
--    data: {"assembly_number": suggestion.eg},
-+    data: {"customer_id": suggestion.eg},
-     dataType: 'json',
++      $('#assembly .typeahead').focus();
    })
-   .done( function(data) {
-@@ -118,12 +118,12 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
-       // constructs the suggestion engine
-       var engine = new Bloodhound({
-         datumTokenizer: function (datum) {
--          return Bloodhound.tokenizers.whitespace(datum.eg);
-+          return Bloodhound.tokenizers.whitespace(datum.value);
-         },
-         queryTokenizer: Bloodhound.tokenizers.whitespace,
-         // `data` is an array of country names defined in "The Basics"
-         local: $.map(data, function(obj) { 
--            return { value : obj.formatId, eg: obj.revision };
-+            return { value : obj.assembly_number, eg: obj.revision };
-         }),
-         limit: 10
-       });
-@@ -134,7 +134,7 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
-       // Instantiate the Typeahead UI
-       $('#assembly .typeahead').typeahead(null, {
-           name: 'data',
--          displayKey: 'eg',
-+          displayKey: 'value',
-           hint: true,
-           highlight: true,
-           minLength: 1,
-@@ -145,7 +145,7 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
-                   'Result not found',
-                 '</div>'
-               ].join('\n'),
--              suggestion: Handlebars.compile("<div style='padding:6px'><b>{{eg}}</b> - format : {{value}} </div>"),
-+              suggestion: Handlebars.compile("<div style='padding:6px'><b>{{value}}</b> - revision : {{eg}} </div>"),
-               footer: function (data) {
-                 return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
-                 // return '<div>Searched for <strong>' + data.query + '</strong></div>';
-
-diff --git a/model/json_db/assembly.php b/model/json_db/assembly.php
-index 1a1bbe6..af4379c 100644
---- a/model/json_db/assembly.php
-+++ b/model/json_db/assembly.php
-@@ -1,12 +1,12 @@
- <?php
- header('Content-Type: application/json');
--// echo json_encode(array("formatId" => "0000","revision" => $_POST["assembly_number"]));
-+// echo json_encode(array("formatId" => "0000","revision" => $_POST["customer_id"]));
- require_once('../dbi_con.php');
--	if($_POST["assembly_number"]){
-+	if($_POST["customer_id"]){
- 		$t_assembly_table = 'seriscan_assembly';
--		$t_assembly_number = $_POST["assembly_number"];
--		$qr = "SELECT * FROM $t_assembly_table WHERE assembly_number='$t_assembly_number'";
--		// $qr = "SELECT formatId, revision FROM $t_assembly_table WHERE assembly_number=".$t_assembly_number;
-+		$t_customer_id = $_POST["customer_id"];
-+		$qr = "SELECT * FROM $t_assembly_table WHERE customer_id='$t_customer_id'";
-+		// $qr = "SELECT formatId, revision FROM $t_assembly_table WHERE customer_id=".$t_customer_id;
- 		$result = $mysqli->query($qr);
- 		if ($result->num_rows){
- 			$t_format_arr = [];
+   .fail(function(jqXHR, textStatus, errorThrown){
+     console.log(jqXHR, textStatus, errorThrown);
+@@ -160,6 +161,8 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
+ 
+ $('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
+   console.log('Selection: ' + JSON.stringify(suggestion));
++  var myData = JSON.stringify({"revision": suggestion.eg});
++  $("#result").append(myData + "<br/>");
+ });
+ /*var $t_format_example = $( this ).find( 'input:hidden' );
+   var foo = $('input.typeahead.tt-input').val();
+diff --git a/view/index.php b/view/index.php
+index 1ff6b1f..b7af983 100644
+--- a/view/index.php
++++ b/view/index.php
+@@ -1,4 +1,3 @@
+-<?php $t_str = "myString";?>
+ <head>
+     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+     <script type="text/javascript" src="../plugin/jquery/jquery-1.11.3.min.js"></script>
+diff --git a/view/serialscan_main_view.php b/view/serialscan_main_view.php
+index e9aceb9..3335768 100644
+--- a/view/serialscan_main_view.php
++++ b/view/serialscan_main_view.php
+@@ -17,15 +17,16 @@
+ 	require_once('../controller/core/is_auth.php');
+ 
+ 	$t_arr = [];
+-	$t_arr['assembly_number'] = $_SESSION['assembly_number'];
++	$t_arr['assembly'] = $_SESSION['assembly'];
+ 	$t_arr['revision'] = $_SESSION['revision'];
++	$t_arr['customer'] = $_SESSION['customer'];
+ 	$t_arr['sale_order'] = $_SESSION['sale_order'];
+ 	$t_arr['format'] = $_SESSION['format'];
+ 	$t_arr['format_example'] = $_SESSION['format_example'];
+ 	$t_arr['access_level'] = $_SESSION['access_level'];
+ 	$t_arr['username'] = $_SESSION['username'];
+ 	$t_arr['time'] = $_SESSION['time'];
+-	$t_arr['primary_key'] = $_SESSION['primary_key'];
++	$t_arr['ss_key'] = $_SESSION['ss_key'];
+ 
+ 	$jsonString = json_encode($t_arr, JSON_PRETTY_PRINT);
+ 

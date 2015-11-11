@@ -1,4 +1,3 @@
-<?php $t_str = "myString";?>
 <head>
     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
     <script type="text/javascript" src="../plugin/jquery/jquery-1.11.3.min.js"></script>
