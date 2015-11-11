@@ -68,14 +68,23 @@ unset($obj);*/
 // $t_new_assembly = new Assembly($t_formatId, $t_assembly_number, $t_revision);
 
 class Format {
+	public $assembly_id;
 	public $format = "";
 	public $format_example = "";
-	function __construct($format, $format_example){
+	function __construct($assembly_id,$format, $format_example){
+		$this->assembly_id = $assembly_id;
 		$this->format = $format;
 		$this->format_example = $format_example;
 	}
 	function __destruct(){}
-
+	
+	public function setAssemblyId($val){
+		$this->assembly_id = $val;
+	}
+	public function getAssemblyId(){
+		return $this->assembly_id;
+	}
+	
 	public function setFormat($val){
 		$this->format = $val;
 	}

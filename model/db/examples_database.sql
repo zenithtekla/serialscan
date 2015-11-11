@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `seriscan_assembly` (
 
 CREATE TABLE IF NOT EXISTS `seriscan_format` (
   `format_id` int(19) NOT NULL AUTO_INCREMENT,
+  `assembly_id` int(19) NOT NULL,
   `format` varchar(60) NOT NULL,
   `format_example` varchar(60) NOT NULL,
   PRIMARY KEY (`format_id`)

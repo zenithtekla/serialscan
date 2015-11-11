@@ -17,36 +17,6 @@
 	$t_format 			= $mysqli->real_escape_string($_POST['format']);
 	$t_format_example 	= $mysqli->real_escape_string($_POST['format_example']);
 
-//-----Format instantiation	
-	// instantiate new object as a new instance of the Format class.
-	$t_new_format = new Format($t_format,$t_format_example);
-	//markup
-	$m_format = $t_new_format->getFormat();
-	$m_format_example = $t_new_format->getFormatExample();
-
-    // move to input_api.php
-	function createScanFormat($p_format, $p_format_example){
-		GLOBAL $mysqli;
-		GLOBAL $t_format_table; // accessing global variable
-		$qr = "INSERT INTO $t_format_table
-						(format, format_example)
-						VALUE
-						( " . $p_format . ',' . $p_format_example . ')';
-		// db_param(); db_query_bound( $query, Array( $p_format, $p_format_example) );
-		$result = $mysqli->query($qr) or die($mysqli->error);
-		echo "New record created successfully. Last inserted ID is: " . $mysqli->insert_id;
-		return $mysqli->insert_id; // formatId
-	}
-	// calling
-	$t_formatId = createScanFormat($m_format, $m_format_example); // should be the same for using $t_format, $t_format_example : testing needed!
-		
-		// indexing JSON data for key-value pair [format]-[format_example]
-		$t_format_data = json_encode($t_new_format);
-		echo "<br />" . $t_format_data . "<br />";
-		$fp = fopen('../json/format_data.json', 'a') or die("Unable to open file!");
-	    fwrite($fp, "\n". $t_format_data);
-	    fclose($fp);
-
 //------Customer instantiation	
 	$t_new_customer = new Customer($t_customer_name);
 
@@ -94,6 +64,37 @@
 		echo "<br/>". $t_assembly_data . "<br/>";
 		$fp = fopen('../json/assembly_data.json', 'a') or die("Unable to open file!");
 	    fwrite($fp, "\n". $t_assembly_data);
+	    fclose($fp);
+
+//-----Format instantiation	
+	// instantiate new object as a new instance of the Format class.
+	$t_new_format = new Format($t_assemblyId,$t_format,$t_format_example);
+	//markup
+	$m_assemblyId = $t_new_format->getAssemblyId();
+	$m_format = $t_new_format->getFormat();
+	$m_format_example = $t_new_format->getFormatExample();
+
+    // move to input_api.php
+	function createScanFormat($p_assemblyId, $p_format, $p_format_example){
+		GLOBAL $mysqli;
+		GLOBAL $t_format_table; // accessing global variable
+		$qr = "INSERT INTO $t_format_table
+						(assembly_id, format, format_example)
+						VALUE
+						( " . $p_assemblyId . ',' . $p_format . ',' . $p_format_example . ')';
+		// db_param(); db_query_bound( $query, Array( $p_format, $p_format_example) );
+		$result = $mysqli->query($qr) or die($mysqli->error);
+		echo "New record created successfully. Last inserted ID is: " . $mysqli->insert_id;
+		return $mysqli->insert_id; // formatId
+	}
+	// calling
+	$t_formatId = createScanFormat($m_assemblyId, $m_format, $m_format_example); // should be the same for using $t_format, $t_format_example : testing needed!
+		
+		// indexing JSON data for key-value pair [format]-[format_example]
+		$t_format_data = json_encode($t_new_format);
+		echo "<br />" . $t_format_data . "<br />";
+		$fp = fopen('../json/format_data.json', 'a') or die("Unable to open file!");
+	    fwrite($fp, "\n". $t_format_data);
 	    fclose($fp);
 
 	echo '<h3><a href="../view/cmod_enter.php">Enter new format</a></h3><br><br>';
