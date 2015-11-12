@@ -79,15 +79,15 @@
 
 		<div id="head-info-wrapper" class="row">
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
-				<span class="input-group-addon" id="assembly_number1">
+				<span class="input-group-addon" id="assembly">
 					{{lang_008}} {{required}}
 				</span>
 				<span class="form-control">
-					{{dataObj.assembly_number}}
+					{{dataObj.assembly}}
 				</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
-				<span class="input-group-addon" id="assembly_number1">
+				<span class="input-group-addon" id="revision">
 					{{lang_009}} {{required}}
 				</span>
 				<span class="form-control">
@@ -95,7 +95,15 @@
 				</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
-				<span class="input-group-addon" id="assembly_number1">
+				<span class="input-group-addon" id="customer">
+					{{lang_014}} {{required}}
+				</span>
+				<span class="form-control">
+					{{dataObj.customer}}
+				</span>
+			</div>
+			<div id="general_input" class="input-group input-group-sm col-sm-4">
+				<span class="input-group-addon" id="sale_order">
 					{{lang_010}} {{required}}
 				</span>
 				<span class="form-control">
@@ -103,7 +111,7 @@
 				</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
-				<span class="input-group-addon" id="assembly_number1">
+				<span class="input-group-addon" id="format">
 					{{lang_011}} {{required}}
 				</span>
 				<span class="form-control">
@@ -111,7 +119,7 @@
 				</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
-				<span class="input-group-addon" id="assembly_number1">
+				<span class="input-group-addon" id="format_example">
 					{{lang_012}} {{required}}
 				</span>
 				<span class="form-control">
@@ -163,14 +171,16 @@
 			lang_011:"Format ",
 			lang_012:"Format Example ",
 			lang_013:"new serial number (auto-submit)",
+			lang_014:"Customer ",
 			logo_size: "border:0;max-width:40px;max-height:40px;",
 			logo_file: "../img/serialscan.png",
 			ent: 'Express Manufacturing Inc.',
 			cmod_link: '<a href="cmod_console.php"><span class="label label-default no-print"><span class="glyphicon glyphicon-cog"></span>&nbspCMOD&nbsp<span class="glyphicon glyphicon-barcode"></span>&nbsp<span class="glyphicon glyphicon-qrcode"></span></span></a>',
 			dataObj:{
 				primary_key: jsonData.primary_key,
-			    assembly_number: jsonData.assembly_number,
+			    assembly: jsonData.assembly,
 			    revision: jsonData.revision,
+			    customer: jsonData.customer,
 			    sale_order: jsonData.sale_order,
 			    format: jsonData.format,
 			    format_example: jsonData.format_example,

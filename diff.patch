@@ -1,113 +1,579 @@
-diff --git a/controller/core/is_auth.php b/controller/core/is_auth.php
-index d2a0b2a..531dfec 100644
---- a/controller/core/is_auth.php
-+++ b/controller/core/is_auth.php
-@@ -6,7 +6,7 @@ session_start();
- // If test fails, send the user to login.php and prevent rest of page being shown.
- if (!isset($_SESSION["is_auth"]) || !isset($_SESSION["access_level"])) {
- 	session_destroy();
--	printf( '<p class="red">Access NOT authenticated</p>' ); header("refresh:2; url=../view/front.php");
-+	printf( '<p class="red" style="color:red">Access NOT authenticated</p>' ); header("refresh:2; url=../view/front.php");
- 	exit;
- }
- else if (isset($_REQUEST['logout']) && $_REQUEST['logout'] == "true") {
-diff --git a/controller/front_post.php b/controller/front_post.php
-index e7fc426..4ccc810 100644
---- a/controller/front_post.php
-+++ b/controller/front_post.php
-@@ -4,26 +4,26 @@
- 
- 	$t_user_table = 'mantis_user_table';
- 	require_once('core/date_time.php');
--	$_SESSION['time']     = getDateTime();
--	$_SESSION['username'] = $_POST['username'];
--	$_SESSION['password'] = $_POST['password'];
--	$_SESSION['assembly'] = $_POST['assembly'];
--	$_SESSION['revision'] = $_POST['revision'];
--	$_SESSION['format'] = $_POST['format'];
--	$_SESSION['format_example'] = $_POST['format_example'];
--	$_SESSION['sale_order'] = $_POST['sale_order'];
--	$_SESSION['ss_key'] = 0;
-+	$_SESSION['time']     			= getDateTime();
-+	$_SESSION['username'] 			= $mysqli->real_escape_string($_POST['username']);
-+	$_SESSION['password'] 			= $mysqli->real_escape_string($_POST['password']);
-+	$_SESSION['assembly_number'] 	= $mysqli->real_escape_string($_POST['assembly_number']);
-+	$_SESSION['revision'] 			= $mysqli->real_escape_string($_POST['revision']);
-+	$_SESSION['format'] 			= $mysqli->real_escape_string($_POST['format']);
-+	$_SESSION['format_example'] 	= $mysqli->real_escape_string($_POST['format_example']);
-+	$_SESSION['sale_order'] 		= $mysqli->real_escape_string($_POST['sale_order']);
-+	$_SESSION['customer'] 			= $mysqli->real_escape_string($_POST['customer']);
-+	$_SESSION['ss_key'] 			= 0;
- 
- 	echo 'username : ' . $_POST['username']. '<br/>';
- 	echo 'password : ' . $_POST['password']. '<br/>';
- 	echo 'format : ' . $_POST['format']. '<br/>';
- 	echo 'format_example : ' . $_POST['format_example']. '<br/>';
--	echo 'sale_order : ' . $_POST['sale_order']. '<br/>';
--	$t_username 		= $mysqli->real_escape_string($_SESSION['username']);
--	$t_password 		= $mysqli->real_escape_string($_SESSION['password']);
--		$t_password_copy 		= $t_password;
--	$t_format 	= $mysqli->real_escape_string($_SESSION['format']);
--	$t_format_example 		= $mysqli->real_escape_string($_SESSION['format_example']);
--	$t_sale_order 		= $mysqli->real_escape_string($_SESSION['sale_order']);
-+	
-+	$t_username 			= $_SESSION['username'];
-+	$t_password 			= $_SESSION['password'];
-+		$t_password_copy 	= $t_password;
-+	$t_format 				= $_SESSION['format'];
-+	$t_format_example 		= $_SESSION['format_example'];
- 	require_once('core/access_control.php');
- ?>
+diff --git a/controller/core/access_control.php b/controller/core/access_control.php
+index 43ba90a..483eba8 100644
+--- a/controller/core/access_control.php
++++ b/controller/core/access_control.php
+@@ -32,7 +32,7 @@
+ 		printf ( 'authentication completed successfully' );
+ 		header("Location: ../view/serialscan_main_view.php");
+
+-	} else { $_SESSION['is_auth'] = false; session_destroy(); printf( '<p class="red">authentication FAILED, wrong set of username and password</p>' ); header("refresh:2; url=../view/front.php");}
++	} else { $_SESSION['is_auth'] = false; session_destroy(); printf( '<p style="color:red">authentication FAILED, wrong set of username and password</p>' ); header("refresh:2; url=../view/front.php");}
+
+     /* close result set */
+     $result->close();
 diff --git a/js/front.js b/js/front.js
-index f78c03e..62316b3 100644
+index 62316b3..e6e405f 100644
 --- a/js/front.js
 +++ b/js/front.js
-@@ -152,6 +152,7 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
+@@ -33,10 +33,11 @@
+     content.innerHTML += template(data);
+ })();
+
+-$.ajax({
++(function(){
++var jqDeferred = $.ajax({
+   dataType: "json",
+-  url: "../model/json_db/customer.php"})
+-  .done( function(data) {
++  url: "../model/json_db/customer.php"});
++  jqDeferred.then( function(data) {
+     /*    $.each(data,function(i,v){
+             console.log(v.format);
+             $.each(v,function(i,va){
+@@ -78,7 +79,7 @@ $.ajax({
+               ].join('\n'),
+               suggestion: Handlebars.compile("<div style='padding:6px'>{{value}}</div>"),
+               footer: function (data) {
+-                return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
++                return Handlebars.compile("<div>Searched for <strong> {{{data.query}}} </strong></div>");
+                 // return '<div>Searched for <strong>' + data.query + '</strong></div>';
+               }
+           }
+@@ -87,34 +88,93 @@ $.ajax({
+   .fail(function(jqXHR, textStatus, errorThrown){
+     console.log('ERROR', textStatus, errorThrown);
+   });
++})();
+
+-
+-
++(function(){
+ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
+-  $('input:hidden').val(suggestion.eg);
+-  console.log($('input:hidden').val());
++  ev.stopPropagation();
++  ev.preventDefault();
++  $('#customer .typeahead').prop( "disabled", true );
++
+   console.log('Selection: ' + JSON.stringify(suggestion));
+-
+   var myData = JSON.stringify({"customer_id": suggestion.eg});
+   $("#result").append(myData + "<br/>");
+
+-  $.ajax({
++  var jqDeferred = $.ajax({
+     type:"POST",
+     url: "../model/json_db/assembly.php",
+     data: {"customer_id": suggestion.eg},
+     dataType: 'json',
++  });
++  jqDeferred.then( function(data) {
++
++    // constructs the suggestion engine
++    var engine = new Bloodhound({
++      datumTokenizer: function (datum) {
++        return Bloodhound.tokenizers.whitespace(datum.value);
++      },
++      queryTokenizer: Bloodhound.tokenizers.whitespace,
++      // `data` is an array of country names defined in "The Basics"
++      local: $.map(data, function(obj) {
++          return { value : obj.assembly_number, eg: obj.revision };
++      }),
++      limit: 10
++    });
++
++    // kicks off the loading/processing of `local` and `prefetch`
++    engine.initialize();
++
++    // Instantiate the Typeahead UI
++    $('#assembly .typeahead').typeahead(null, {
++        name: 'data',
++        displayKey: 'value',
++        hint: true,
++        highlight: true,
++        minLength: 1,
++        source: engine.ttAdapter(),
++        templates: {
++            empty: [
++              '<div class="empty-message">',
++                'Result not found',
++              '</div>'
++            ].join('\n'),
++            suggestion: Handlebars.compile("<div style='padding:6px'>{{value}}</div>"),
++            footer: function (data) {
++              // return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
++              return '<div>Searched for <strong>' + data.query + '</strong></div>';
++            }
++        }
++    });
++    $('#customer .typeahead').typeahead('close');
++    $('#assembly .typeahead').focus();
+   })
+-  .done( function(data) {
+-    $("#result").append(data.assembly_number);
+-    /*    $.each(data,function(i,v){
+-            console.log(v.format);
+-            $.each(v,function(i,va){
+-                console.log(va);
+-            })
+-        });
+-      $.map(data, function(obj) {
+-        console.log(obj.format + "example" + obj.format_example);
+-      }); http://forum.jquery.com/topic/jquery-and-json-troubles */
++  .fail(function(jqXHR, textStatus, errorThrown){
++    console.log(jqXHR, textStatus, errorThrown);
++  });
++});
++})();
++
++(function(){
++/*$('#assembly .typeahead').on('blur', function(event) {
++  event.stopPropagation();
++  $('#assembly .typeahead').typeahead('close');
++});  */
++$('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
++  ev.stopPropagation();
++  ev.preventDefault();
++  $('#assembly .typeahead').prop( "disabled", true );
++
++  console.log('Selection: ' + JSON.stringify(suggestion));
++  var myData = JSON.stringify({"assembly_number": suggestion.value});
++  $("#result").append(myData + "<br/>");
++
++  var jqDeferred = $.ajax({
++    type:"POST",
++    url: "../model/json_db/revision.php",
++    data: {"assembly_number": suggestion.value},
++    dataType: 'json',
++  });
++  jqDeferred.then( function(data) {
+       // constructs the suggestion engine
+       var engine = new Bloodhound({
+         datumTokenizer: function (datum) {
+@@ -123,7 +183,7 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
+         queryTokenizer: Bloodhound.tokenizers.whitespace,
+         // `data` is an array of country names defined in "The Basics"
+         local: $.map(data, function(obj) {
+-            return { value : obj.assembly_number, eg: obj.revision };
++            return { value : obj.revision, eg: obj.assembly_id };
+         }),
+         limit: 10
+       });
+@@ -132,7 +192,7 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
+       engine.initialize();
+
+       // Instantiate the Typeahead UI
+-      $('#assembly .typeahead').typeahead(null, {
++      $('#revision .typeahead').typeahead(null, {
+           name: 'data',
+           displayKey: 'value',
+           hint: true,
+@@ -145,25 +205,112 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
+                   'Result not found',
+                 '</div>'
+               ].join('\n'),
+-              suggestion: Handlebars.compile("<div style='padding:6px'><b>{{value}}</b> - revision : {{eg}} </div>"),
++              suggestion: Handlebars.compile("<div style='padding:6px'>{{value}}</div>"),
+               footer: function (data) {
+-                return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
+-                // return '<div>Searched for <strong>' + data.query + '</strong></div>';
++                // return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
++                return '<div>Searched for <strong>' + data.query + '</strong></div>';
                }
            }
        });
-+      $('#assembly .typeahead').focus();
+-      $('#assembly .typeahead').focus();
++      $('#assembly .typeahead').typeahead('close');
++      $('#revision .typeahead').focus();
    })
    .fail(function(jqXHR, textStatus, errorThrown){
      console.log(jqXHR, textStatus, errorThrown);
-@@ -160,6 +161,8 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
- 
- $('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
-   console.log('Selection: ' + JSON.stringify(suggestion));
-+  var myData = JSON.stringify({"revision": suggestion.eg});
-+  $("#result").append(myData + "<br/>");
+   });
  });
++})();
++
++(function(){
++$('#revision .typeahead').bind('typeahead:select', function(ev, suggestion) {
++  ev.stopPropagation();
++  ev.preventDefault();
++  $('#revision .typeahead').prop( "disabled", true );
+
+-$('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
+   console.log('Selection: ' + JSON.stringify(suggestion));
+-  var myData = JSON.stringify({"revision": suggestion.eg});
++  var myData = JSON.stringify({"assembly_id": suggestion.eg});
+   $("#result").append(myData + "<br/>");
++
++  var jqDeferred = $.ajax({
++    type:"POST",
++    url: "../model/json_db/format.php",
++    data: {"assembly_id": suggestion.eg},
++    dataType: 'json',
++  });
++  jqDeferred.then( function(data) {
++      // constructs the suggestion engine
++      var engine = new Bloodhound({
++        datumTokenizer: function (datum) {
++          return Bloodhound.tokenizers.whitespace(datum.value);
++        },
++        queryTokenizer: Bloodhound.tokenizers.whitespace,
++        // `data` is an array of country names defined in "The Basics"
++        local: $.map(data, function(obj) {
++            return { value : obj.format, eg: obj.format_example };
++        }),
++        limit: 10
++      });
++
++      // kicks off the loading/processing of `local` and `prefetch`
++      engine.initialize();
++
++      // Instantiate the Typeahead UI
++      $('#format .typeahead').typeahead(null, {
++          name: 'data',
++          displayKey: 'value',
++          hint: true,
++          highlight: true,
++          minLength: 1,
++          source: engine.ttAdapter(),
++          templates: {
++              empty: [
++                '<div class="empty-message">',
++                  'Result not found',
++                '</div>'
++              ].join('\n'),
++              suggestion: Handlebars.compile("<div style='padding:6px'><b>{{value}}</b> - format_example : {{eg}} </div>"),
++              footer: function (data) {
++                // return Handlebars.compile("<div>Searched for <strong> {{data.query}} </strong></div>");
++                return '<div>Searched for <strong>' + data.query + '</strong></div>';
++              }
++          }
++      });
++      $('#revision .typeahead').typeahead('close');
++      $('#format .typeahead').focus();
++  })
++  .fail(function(jqXHR, textStatus, errorThrown){
++    console.log(jqXHR, textStatus, errorThrown);
++  });
++});
++})();
++
++$('#format .typeahead').bind('typeahead:select', function(ev, suggestion) {
++  ev.stopPropagation();
++  ev.preventDefault();
++  $('#format .typeahead').prop( "disabled", true );
++
++  $('input:hidden').val(suggestion.eg);
++  console.log($('input:hidden').val());
++  var myData = JSON.stringify({"format": suggestion.value,"format_example": suggestion.eg});
++  $("#result").append(myData + "<br/>");
++
++  $('.button-submit').css({"border": "3px solid red","outline-width": "thin"})
++                      .animate({outlineWidth: "20px"}, "slow");
+ });
++
++$("input:submit").on('click', function(e){
++  e.stopPropagation();
++
++  if ($("input:password").val().length){
++    $('.typeahead') .prop( "disabled", false );
++    return true;
++  } else e.preventDefault();
++});
++
++$("input:reset").on('click', function(){
++  window.location.reload(); // css-style from http://www.cssbuttongenerator.com/
++});
++
  /*var $t_format_example = $( this ).find( 'input:hidden' );
    var foo = $('input.typeahead.tt-input').val();
-diff --git a/view/index.php b/view/index.php
-index 1ff6b1f..b7af983 100644
---- a/view/index.php
-+++ b/view/index.php
-@@ -1,4 +1,3 @@
--<?php $t_str = "myString";?>
- <head>
-     <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
-     <script type="text/javascript" src="../plugin/jquery/jquery-1.11.3.min.js"></script>
+   console.log(foo);
+diff --git a/model/json_db/assembly.php b/model/json_db/assembly.php
+index 7bb51f5..b7c7f12 100644
+--- a/model/json_db/assembly.php
++++ b/model/json_db/assembly.php
+@@ -5,7 +5,7 @@ require_once('../dbi_con.php');
+ 	if($_POST["customer_id"]){
+ 		$t_assembly_table = 'seriscan_assembly';
+ 		$t_customer_id = $_POST["customer_id"];
+-		$qr = "SELECT * FROM $t_assembly_table WHERE customer_id='$t_customer_id'";
++		$qr = "SELECT assembly_number, revision FROM $t_assembly_table WHERE customer_id='$t_customer_id'";
+ 		// $qr = "SELECT formatId, revision FROM $t_assembly_table WHERE customer_id=".$t_customer_id;
+ 		$result = $mysqli->query($qr) or die($mysqli->error);
+ 		$num_rows = $result->num_rows;
+diff --git a/model/json_db/format.php b/model/json_db/format.php
+index f983780..8ffc7e6 100644
+--- a/model/json_db/format.php
++++ b/model/json_db/format.php
+@@ -2,15 +2,26 @@
+ header('Content-Type: application/json');
+ require_once('../dbi_con.php');
+
++if($_POST["assembly_id"]){
++	$t_assembly_table = 'seriscan_assembly';
+ 	$t_format_table = 'seriscan_format';
+-	$qr = "SELECT format, format_example FROM $t_format_table";
+-	$result = $mysqli->query($qr);
+-	$t_format_arr = [];
+-	if ($result){
++	$t_assembly_id = $_POST["assembly_id"];
++	$qr = "SELECT format_id, format, format_example FROM $t_format_table WHERE assembly_id='$t_assembly_id'";
++	// $qr = "SELECT formatId, revision FROM $t_assembly_table WHERE assembly_id=".$t_assembly_id;
++	$result = $mysqli->query($qr) or die($mysqli->error);
++	$num_rows = $result->num_rows;
++
++	if ($num_rows){
++		$t_format_arr = [];
+ 		while ( ($row=$result->fetch_assoc()) !== null ) {
+ 			$t_format_arr[] = $row;
+ 		}
+-	} else die('Invalid query: ' . mysql_error());
++		$result->free();
++	}
++
++    /* close connection */
++	$mysqli->close();
+
+ 	$jsonString = json_encode($t_format_arr, JSON_PRETTY_PRINT);
+-	echo $jsonString;
+\ No newline at end of file
++	echo $jsonString;
++}
+\ No newline at end of file
+diff --git a/model/json_db/revision.php b/model/json_db/revision.php
+new file mode 100644
+index 0000000..b28e760
+--- /dev/null
++++ b/model/json_db/revision.php
+@@ -0,0 +1,24 @@
++<?php
++header('Content-Type: application/json');
++require_once('../dbi_con.php');
++	if($_POST["assembly_number"]){
++		$t_assembly_table = 'seriscan_assembly';
++		$t_assembly_number = $_POST["assembly_number"];
++		$qr = "SELECT revision, assembly_id FROM $t_assembly_table WHERE assembly_number='$t_assembly_number'";
++		$result = $mysqli->query($qr) or die($mysqli->error);
++		$num_rows = $result->num_rows;
++
++		if ($num_rows){
++			$t_format_arr = [];
++			while ( ($row=$result->fetch_assoc()) !== null ) {
++				$t_format_arr[] = $row;
++			}
++			$result->free();
++		}
++
++	    /* close connection */
++		$mysqli->close();
++
++		$jsonString = json_encode($t_format_arr, JSON_PRETTY_PRINT);
++		echo $jsonString;
++	}
+\ No newline at end of file
+diff --git a/view/front.php b/view/front.php
+index 9b61ce6..5a06f40 100644
+--- a/view/front.php
++++ b/view/front.php
+@@ -29,6 +29,97 @@
+ 	.padding {
+ 		padding-bottom:10px;
+ 	}
++
++	.button-submit {
++	-moz-box-shadow:inset 0px 1px 0px 0px #c1ed9c;
++	-webkit-box-shadow:inset 0px 1px 0px 0px #c1ed9c;
++	box-shadow:inset 0px 1px 0px 0px #c1ed9c;
++	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #9dce2c), color-stop(1, #8cb82b) );
++	background:-moz-linear-gradient( center top, #9dce2c 5%, #8cb82b 100% );
++	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9dce2c', endColorstr='#8cb82b');
++	background-color:#9dce2c;
++	-webkit-border-top-left-radius:8px;
++	-moz-border-radius-topleft:8px;
++	border-top-left-radius:8px;
++	-webkit-border-top-right-radius:8px;
++	-moz-border-radius-topright:8px;
++	border-top-right-radius:8px;
++	-webkit-border-bottom-right-radius:8px;
++	-moz-border-radius-bottomright:8px;
++	border-bottom-right-radius:8px;
++	-webkit-border-bottom-left-radius:8px;
++	-moz-border-radius-bottomleft:8px;
++	border-bottom-left-radius:8px;
++	text-indent:0px;
++	border:1px solid #83c41a;
++	display:inline-block;
++	color:#ffffff;
++	font-family:Arial;
++	font-size:23px;
++	font-weight:bold;
++	font-style:normal;
++	height:45px;
++	line-height:45px;
++	width:160px;
++	text-decoration:none;
++	text-align:center;
++	text-shadow:1px 1px 0px #689324;
++	}
++	.button-submit:hover {
++		background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #8cb82b), color-stop(1, #9dce2c) );
++		background:-moz-linear-gradient( center top, #8cb82b 5%, #9dce2c 100% );
++		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#8cb82b', endColorstr='#9dce2c');
++		background-color:#8cb82b;
++	}.button-submit:active {
++		position:relative;
++		top:1px;
++	}
++
++	.button-reset {
++	-moz-box-shadow:inset 0px 1px 0px 0px #e6cafc;
++	-webkit-box-shadow:inset 0px 1px 0px 0px #e6cafc;
++	box-shadow:inset 0px 1px 0px 0px #e6cafc;
++	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #c579ff), color-stop(1, #a341ee) );
++	background:-moz-linear-gradient( center top, #c579ff 5%, #a341ee 100% );
++	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c579ff', endColorstr='#a341ee');
++	background-color:#c579ff;
++	-webkit-border-top-left-radius:8px;
++	-moz-border-radius-topleft:8px;
++	border-top-left-radius:8px;
++	-webkit-border-top-right-radius:8px;
++	-moz-border-radius-topright:8px;
++	border-top-right-radius:8px;
++	-webkit-border-bottom-right-radius:8px;
++	-moz-border-radius-bottomright:8px;
++	border-bottom-right-radius:8px;
++	-webkit-border-bottom-left-radius:8px;
++	-moz-border-radius-bottomleft:8px;
++	border-bottom-left-radius:8px;
++	text-indent:0px;
++	border:1px solid #a946f5;
++	display:inline-block;
++	color:#ffffff;
++	font-family:Arial;
++	font-size:23px;
++	font-weight:bold;
++	font-style:normal;
++	height:45px;
++	line-height:45px;
++	width:160px;
++	text-decoration:none;
++	text-align:center;
++	text-shadow:1px 1px 0px #8628ce;
++	}
++	.button-reset:hover {
++		background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #a341ee), color-stop(1, #c579ff) );
++		background:-moz-linear-gradient( center top, #a341ee 5%, #c579ff 100% );
++		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#a341ee', endColorstr='#c579ff');
++		background-color:#a341ee;
++	}.button-reset:active {
++		position:relative;
++		top:1px;
++	}
++
+ </style>
+ </head>
+ <body>
+@@ -50,7 +141,6 @@
+ 		{{heading title}}
+ 	<br/>
+ 	<form action="../controller/front_post.php" method="post">
+-		<div id="result"></div>
+
+ 		<div class="padding">
+ 			{{username}} {{required}}:
+@@ -69,7 +159,7 @@
+
+ 		<div id="customer" class="scrollable-dropdown-menu padding">
+ 			{{bold customer}} {{required}}:
+-				<input class="typeahead" type="text" name="customer">
++				<input class="typeahead" type="text" name="customer" id="customer">
+ 		</div>
+
+ 		<div id="assembly" class="scrollable-dropdown-menu padding">
+@@ -89,7 +179,10 @@
+
+ 		<input type="hidden" name="format_example">
+
+-		<input type="submit" value="{{{session}}}"><input type="{{{reset}}}" class="marginleft" value="Reset">
++		<input type="submit" value="{{{session}}}" class="button-submit"> <input type="{{{reset}}}" class="button-reset" value="Reset">
++		<br/>
++		<br/>
++		<div id="result"></div>
+ 	</form>
+ 	</div>
+ 	</script>
 diff --git a/view/serialscan_main_view.php b/view/serialscan_main_view.php
-index e9aceb9..3335768 100644
+index e905dcc..f16845d 100644
 --- a/view/serialscan_main_view.php
 +++ b/view/serialscan_main_view.php
-@@ -17,15 +17,16 @@
- 	require_once('../controller/core/is_auth.php');
- 
- 	$t_arr = [];
--	$t_arr['assembly_number'] = $_SESSION['assembly_number'];
-+	$t_arr['assembly'] = $_SESSION['assembly'];
- 	$t_arr['revision'] = $_SESSION['revision'];
-+	$t_arr['customer'] = $_SESSION['customer'];
- 	$t_arr['sale_order'] = $_SESSION['sale_order'];
- 	$t_arr['format'] = $_SESSION['format'];
- 	$t_arr['format_example'] = $_SESSION['format_example'];
- 	$t_arr['access_level'] = $_SESSION['access_level'];
- 	$t_arr['username'] = $_SESSION['username'];
- 	$t_arr['time'] = $_SESSION['time'];
--	$t_arr['primary_key'] = $_SESSION['primary_key'];
-+	$t_arr['ss_key'] = $_SESSION['ss_key'];
- 
- 	$jsonString = json_encode($t_arr, JSON_PRETTY_PRINT);
- 
+@@ -79,15 +79,15 @@
+
+ 		<div id="head-info-wrapper" class="row">
+ 			<div id="general_input" class="input-group input-group-sm col-sm-4">
+-				<span class="input-group-addon" id="assembly_number1">
++				<span class="input-group-addon" id="assembly">
+ 					{{lang_008}} {{required}}
+ 				</span>
+ 				<span class="form-control">
+-					{{dataObj.assembly_number}}
++					{{dataObj.assembly}}
+ 				</span>
+ 			</div>
+ 			<div id="general_input" class="input-group input-group-sm col-sm-4">
+-				<span class="input-group-addon" id="assembly_number1">
++				<span class="input-group-addon" id="revision">
+ 					{{lang_009}} {{required}}
+ 				</span>
+ 				<span class="form-control">
+@@ -95,7 +95,15 @@
+ 				</span>
+ 			</div>
+ 			<div id="general_input" class="input-group input-group-sm col-sm-4">
+-				<span class="input-group-addon" id="assembly_number1">
++				<span class="input-group-addon" id="customer">
++					{{lang_014}} {{required}}
++				</span>
++				<span class="form-control">
++					{{dataObj.customer}}
++				</span>
++			</div>
++			<div id="general_input" class="input-group input-group-sm col-sm-4">
++				<span class="input-group-addon" id="sale_order">
+ 					{{lang_010}} {{required}}
+ 				</span>
+ 				<span class="form-control">
+@@ -103,7 +111,7 @@
+ 				</span>
+ 			</div>
+ 			<div id="general_input" class="input-group input-group-sm col-sm-4">
+-				<span class="input-group-addon" id="assembly_number1">
++				<span class="input-group-addon" id="format">
+ 					{{lang_011}} {{required}}
+ 				</span>
+ 				<span class="form-control">
+@@ -111,7 +119,7 @@
+ 				</span>
+ 			</div>
+ 			<div id="general_input" class="input-group input-group-sm col-sm-4">
+-				<span class="input-group-addon" id="assembly_number1">
++				<span class="input-group-addon" id="format_example">
+ 					{{lang_012}} {{required}}
+ 				</span>
+ 				<span class="form-control">
+@@ -163,14 +171,16 @@
+ 			lang_011:"Format ",
+ 			lang_012:"Format Example ",
+ 			lang_013:"new serial number (auto-submit)",
++			lang_014:"Customer ",
+ 			logo_size: "border:0;max-width:40px;max-height:40px;",
+ 			logo_file: "../img/serialscan.png",
+ 			ent: 'Express Manufacturing Inc.',
+ 			cmod_link: '<a href="cmod_console.php"><span class="label label-default no-print"><span class="glyphicon glyphicon-cog"></span>&nbspCMOD&nbsp<span class="glyphicon glyphicon-barcode"></span>&nbsp<span class="glyphicon glyphicon-qrcode"></span></span></a>',
+ 			dataObj:{
+ 				primary_key: jsonData.primary_key,
+-			    assembly_number: jsonData.assembly_number,
++			    assembly: jsonData.assembly,
+ 			    revision: jsonData.revision,
++			    customer: jsonData.customer,
+ 			    sale_order: jsonData.sale_order,
+ 			    format: jsonData.format,
+ 			    format_example: jsonData.format_example,
