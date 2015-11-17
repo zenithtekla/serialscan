@@ -13,7 +13,7 @@ if($_POST["assembly_id"]){
 
 	if ($num_rows){
 		$t_format_arr = [];
-		while ( ($row=$result->fetch_assoc()) !== null ) {
+		while ($row=$result->fetch_assoc()) {
 			$t_format_arr[] = $row;
 		}
 		$result->free();

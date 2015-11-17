@@ -10,7 +10,7 @@ require_once('../dbi_con.php');
 
 		if ($num_rows){
 			$t_format_arr = [];
-			while ( ($row=$result->fetch_assoc()) !== null ) {
+			while ($row=$result->fetch_assoc()) {
 				$t_format_arr[] = $row;
 			}
 			$result->free();

@@ -35,6 +35,7 @@
 
 (function(){
 var jqDeferred = $.ajax({
+  type: "POST",
   dataType: "json",
   url: "../model/json_db/customer.php"});
   jqDeferred.then( function(data) {

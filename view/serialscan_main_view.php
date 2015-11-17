@@ -26,7 +26,8 @@
 	$t_arr['access_level'] 		= $_SESSION['access_level'];
 	$t_arr['username'] 			= $_SESSION['username'];
 	$t_arr['time'] 				= $_SESSION['time'];
-	$t_arr['ss_key'] 			= $_SESSION['ss_key'];
+	$t_arr['ssId']				= session_id();
+	$t_arr['sessionId']			= str_repeat('*', max(1, strlen($t_arr['ssId']) - 4)) . substr($t_arr['ssId'], strlen($t_arr['ssId']) - 4, strlen($t_arr['ssId']));
 
 	$jsonString = json_encode($t_arr, JSON_PRETTY_PRINT);
 
@@ -147,8 +148,6 @@
 	<script type="text/javascript">
 	var jsonData =<?php echo $jsonString?>;
 	(function(){
-		console.log(jsonData);
-		console.log(jsonData.username);
 	    // Grab the template script $("homeview-template").html()
 		var myInfo = document.getElementById("homeview-template").innerHTML;
 
@@ -187,7 +186,7 @@
 			    access_level: jsonData.access_level,
 			    username: jsonData.username,
 			    time: jsonData.time,
-			    sessionId: 'md5#0001'
+			    sessionId: "sessionId: " + jsonData.sessionId
 			}
 		};
 		Handlebars.registerHelper("required", function(){
