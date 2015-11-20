@@ -143,40 +143,42 @@
 	<form action="../controller/front_post.php" method="post">
 
 		<div class="padding">
-			{{username}} {{required}}:
+			{{username}} {{required}}
 				<input type="text" name="username" class="typeahead" required>
 		</div>
 
 		<div class="padding">
-			{{password}} {{required}}:
+			{{password}} {{required}}
 				<input type="password" name="password" class="typeahead" required>
 		</div>
 
 		<div class="padding">
-			{{sale_order}} {{required}}:
+			{{sale_order}} {{required}}
 				<input type="text" name="sale_order" class="typeahead" required>
 		</div>
 
 		<div id="customer" class="scrollable-dropdown-menu padding">
-			{{bold customer}} {{required}}:
+			{{bold customer}} {{required}}
 				<input class="typeahead" type="text" name="customer" id="customer">
 		</div>
 
 		<div id="assembly" class="scrollable-dropdown-menu padding">
-			{{italic assembly}} {{required}}:
+			{{italic assembly}} {{required}}
 				<input class="typeahead" type="text" name="assembly">
 		</div>
 
 		<div id="revision" class="scrollable-dropdown-menu padding">
-			{{revision}} {{required}}:
+			{{revision}} {{required}}
 				<input class="typeahead" type="text" name="revision">
 		</div>
 
 		<div id="format" class="scrollable-dropdown-menu padding">
-			{{format}} {{required}}:
+			{{format}} {{required}}
 				<input class="typeahead" type="text" name="format">
 		</div>
 
+		<input type="hidden" name="assembly_id">
+		<input type="hidden" name="customer_id">
 		<input type="hidden" name="format_example">
 
 		<input type="submit" value="{{{session}}}" class="button-submit"> <input type="{{{reset}}}" class="button-reset" value="Reset">

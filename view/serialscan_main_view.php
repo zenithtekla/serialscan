@@ -26,10 +26,14 @@
 	$t_arr['access_level'] 		= $_SESSION['access_level'];
 	$t_arr['username'] 			= $_SESSION['username'];
 	$t_arr['time'] 				= $_SESSION['time'];
+	$t_arr['userId'] 			= $_SESSION['userId'];
+	$t_arr['assemblyId'] 		= $_SESSION['assemblyId'];
+	$t_arr['customerId'] 		= $_SESSION['customerId'];
 	$t_arr['ssId']				= session_id();
 	$t_arr['sessionId']			= str_repeat('*', max(1, strlen($t_arr['ssId']) - 4)) . substr($t_arr['ssId'], strlen($t_arr['ssId']) - 4, strlen($t_arr['ssId']));
 
 	$jsonString = json_encode($t_arr, JSON_PRETTY_PRINT);
+	echo $jsonString;
 
 	$t_sessionId = 'md5#0001';
 ?>

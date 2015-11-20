@@ -28,18 +28,25 @@ $(document).ready(function() {
                     $.ajax({
                         type:'POST',
                         url: '../controller/scan_proc.php',
-                        data: { qr: q},
+                        data: { new_scan: q}
                         //contentType: "application/json",
                         // dataType: 'json'
                     }).done(function(data){
+                        if (data.indexOf('ERROR')>-1){
+                            $("#virhe") .removeClass("alert-success")
+                                        .addClass("alert-danger");
+                            $("#virhe").empty().append("Attention: " + data);
+                        } else {
                         $("#virhe") .removeClass("alert-danger")
                                     .addClass("alert-success");
+                        
                         $("#virhe").empty().append("last scan: " + data);
                         $("#log-wrapper")  .append( data + "<br/>")
                                             .addClass("bg-success")
                                             .css({  "max-height":"300px",
                                                     "overflow-y" : "auto" })
                         .animate({"scrollTop": $("#log-wrapper")[0].scrollHeight}, "slow");
+                        }
                     }).fail(function(jqXHR,textStatus, errorThrown){
                         $("#virhe") .removeClass("alert-success")
                                     .addClass("alert-danger")

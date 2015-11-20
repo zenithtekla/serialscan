@@ -55,6 +55,8 @@
 </head>
 <body>
 	<?php
+	require_once('../controller/core/date_time.php');
+	echo getDateTime();
 echo '
 	<div class="container">
 	<!-- Console Log -->
@@ -108,7 +110,7 @@ echo '
 	';
 	?>
 	<script>
-		
+
 	</script>
 </body>
 </html>

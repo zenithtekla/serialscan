@@ -2,7 +2,7 @@
 	require_once('../model/dbi_con.php');
 	require_once('../model/db_modeling.php');
 	session_start();
-	
+
 	$t_user_table = 'mantis_user_table';
 	$t_format_table = 'seriscan_format';
 	$t_assembly_table = 'seriscan_assembly';
@@ -10,14 +10,14 @@
 
 	require_once('core/date_time.php');
 	$_SESSION['time']     = getDateTime();
-	
+
 	$t_customer_name 	= $mysqli->real_escape_string($_POST['customer_name']);
 	$t_assembly_number 	= $mysqli->real_escape_string($_POST['assembly_number']);
 	$t_revision 		= $mysqli->real_escape_string($_POST['revision']);
 	$t_format 			= $mysqli->real_escape_string($_POST['format']);
 	$t_format_example 	= $mysqli->real_escape_string($_POST['format_example']);
 
-//------Customer instantiation	
+//------Customer instantiation
 	$t_new_customer = new Customer($t_customer_name);
 
 	function createCustomer($p_customer_name){
@@ -58,7 +58,7 @@
 	}
 
 	$t_assemblyId = createAssembly($t_new_assembly->getCustomerId(), $t_new_assembly->getAssemblyNumber(), $t_new_assembly->getRevision() );
-	
+
 		// indexing JSON data for key-value pair [assembly_number]-[format]
 		$t_assembly_data = json_encode($t_new_assembly); // unsafe encoding, 3 values not a pair!
 		echo "<br/>". $t_assembly_data . "<br/>";
@@ -66,7 +66,7 @@
 	    fwrite($fp, "\n". $t_assembly_data);
 	    fclose($fp);
 
-//-----Format instantiation	
+//-----Format instantiation
 	// instantiate new object as a new instance of the Format class.
 	$t_new_format = new Format($t_assemblyId,$t_format,$t_format_example);
 	//markup
@@ -89,7 +89,7 @@
 	}
 	// calling
 	$t_formatId = createScanFormat($m_assemblyId, $m_format, $m_format_example); // should be the same for using $t_format, $t_format_example : testing needed!
-		
+
 		// indexing JSON data for key-value pair [format]-[format_example]
 		$t_format_data = json_encode($t_new_format);
 		echo "<br />" . $t_format_data . "<br />";

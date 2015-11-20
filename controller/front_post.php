@@ -6,6 +6,7 @@
 	require_once('core/date_time.php');
 	$_SESSION['time']     			= getDateTime();
 	$_SESSION['username'] 			= $mysqli->real_escape_string($_POST['username']);
+	$_SESSION['assemblyId'] 		= $mysqli->real_escape_string($_POST['assembly_id']);
 	$_SESSION['password'] 			= $mysqli->real_escape_string($_POST['password']);
 	$_SESSION['assembly'] 			= $mysqli->real_escape_string($_POST['assembly']);
 	$_SESSION['revision'] 			= $mysqli->real_escape_string($_POST['revision']);
@@ -13,6 +14,7 @@
 	$_SESSION['format_example'] 	= $mysqli->real_escape_string($_POST['format_example']);
 	$_SESSION['sale_order'] 		= $mysqli->real_escape_string($_POST['sale_order']);
 	$_SESSION['customer'] 			= $mysqli->real_escape_string($_POST['customer']);
+	$_SESSION['customerId'] 		= $mysqli->real_escape_string($_POST['customer_id']);
 	$_SESSION['ss_key'] 			= 0;
 
 	echo 'username : ' . $_POST['username']. '<br/>';

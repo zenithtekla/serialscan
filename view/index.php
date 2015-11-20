@@ -5,9 +5,9 @@
 </head>
 <body>
     <section id="myData"></section>
-    
+
     <script src="../plugin/handlebars/handlebars-v4.0.4.js"></script>
-    
+
     <script id="url-template" type="text/template">
     <div class="container col-md-offset-3">
         <br>
@@ -20,7 +20,7 @@
         {{/link}}
     </div>
     </script>
-    
+
     <script src="../js/index_script.js"></script>
 </body>
 

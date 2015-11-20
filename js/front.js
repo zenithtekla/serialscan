@@ -97,6 +97,8 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
   ev.preventDefault();
   $('#customer .typeahead').prop( "disabled", true );
 
+  $('input[name="customer_id"]').val(suggestion.eg);
+
   console.log('Selection: ' + JSON.stringify(suggestion));
   var myData = JSON.stringify({"customer_id": suggestion.eg});
   $("#result").append(myData + "<br/>");
@@ -228,6 +230,8 @@ $('#revision .typeahead').bind('typeahead:select', function(ev, suggestion) {
   ev.preventDefault();
   $('#revision .typeahead').prop( "disabled", true );
 
+  $('input[name="assembly_id"]').val(suggestion.eg);
+
   console.log('Selection: ' + JSON.stringify(suggestion));
   var myData = JSON.stringify({"assembly_id": suggestion.eg});
   $("#result").append(myData + "<br/>");
@@ -289,8 +293,7 @@ $('#format .typeahead').bind('typeahead:select', function(ev, suggestion) {
   ev.stopPropagation();
   ev.preventDefault();
   $('#format .typeahead').prop( "disabled", true );
-
-  $('input:hidden').val(suggestion.eg);
+  $('input[name="format_example"]').val(suggestion.eg);
   console.log($('input:hidden').val());
   var myData = JSON.stringify({"format": suggestion.value,"format_example": suggestion.eg});
   $("#result").append(myData + "<br/>");

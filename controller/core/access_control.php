@@ -27,6 +27,7 @@
 		if ($num_rows==1)
 		while ($row = $result->fetch_assoc()) {
 			$_SESSION['access_level'] = $row['access_level'];
+			$_SESSION['userId'] = $row['id'];
     	}
     	$result->free();
 		printf ( 'authentication completed successfully' );
