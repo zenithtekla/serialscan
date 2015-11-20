@@ -1,18 +1,9 @@
 (function(){
-    var content = document.getElementById('myData');
+    var content = document.getElementById('ui_data');
     var html = '';
-    var data = {
-        title: 'Serial_Scan USER ACCESS',
-        username: 'Login name',
-        password: 'Password',
-        sale_order: 'Sale Order',
-        customer: 'Customer',
-        assembly: 'Assembly',
-        revision: 'Revision',
-        format: 'Format',
-        session: 'New session',
-        reset: 'Reset'
-    };
+
+    var data = JSON.parse(localStorage.getItem("tpl_data"));
+
     Handlebars.registerHelper('heading',function(text){
         text = Handlebars.escapeExpression(text);
        return new Handlebars.SafeString('<h2>'+text+'</h2>');
@@ -29,7 +20,7 @@
 			return new Handlebars.SafeString('<span class="required"> * </span>');
 		});
 
-    var template = Handlebars.compile(document.getElementById('url-template').innerHTML);
+    var template = Handlebars.compile(document.getElementById('ui_template').innerHTML);
     content.innerHTML += template(data);
 })();
 

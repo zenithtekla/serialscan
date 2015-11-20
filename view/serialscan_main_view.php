@@ -33,21 +33,20 @@
 	$t_arr['sessionId']			= str_repeat('*', max(1, strlen($t_arr['ssId']) - 4)) . substr($t_arr['ssId'], strlen($t_arr['ssId']) - 4, strlen($t_arr['ssId']));
 
 	$jsonString = json_encode($t_arr, JSON_PRETTY_PRINT);
-	echo $jsonString;
 
 	$t_sessionId = 'md5#0001';
 ?>
-	<div id="homeviewData"></div>
+	<div id="ui_data"></div>
 	<script src="../plugin/handlebars/handlebars-v4.0.4.js"></script>
 
-	<script id="homeview-template" type="text/template">
+	<script id="ui_template" type="text/template">
 	<div class="container" id="printable">
-		<p>	{{lang_001}} {{dataObj.username}},
-			{{lang_002}} {{dataObj.time}}
+		<p>	{{lang_001}} {{tpl_dataObj.username}},
+			{{lang_002}} {{tpl_dataObj.time}}
 		</p>
 		<div id="logo-section" class="page-header row">
 			<div id="logo" class="col-lg-3">
-				{{#notGreater 25 dataObj.access_level}}
+				{{#notGreater 25 tpl_dataObj.access_level}}
 					{{{cmod_link}}}
 				{{else}}
 				{{/notGreater}}
@@ -60,7 +59,7 @@
 			</div>
 			<div id="session-id" class="col-lg-3 no-print">
 				<span id="sessionId">
-				{{dataObj.sessionId}}
+				{{tpl_dataObj.sessionId}}
 				</span>
 			</div>
 			<div id="bouton" class="col-lg-3 no-print">
@@ -88,7 +87,7 @@
 					{{lang_008}} {{required}}
 				</span>
 				<span class="form-control">
-					{{dataObj.assembly}}
+					{{tpl_dataObj.assembly}}
 				</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
@@ -96,7 +95,7 @@
 					{{lang_009}} {{required}}
 				</span>
 				<span class="form-control">
-					{{dataObj.revision}}
+					{{tpl_dataObj.revision}}
 				</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
@@ -104,7 +103,7 @@
 					{{lang_014}} {{required}}
 				</span>
 				<span class="form-control">
-					{{dataObj.customer}}
+					{{tpl_dataObj.customer}}
 				</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
@@ -112,7 +111,7 @@
 					{{lang_010}} {{required}}
 				</span>
 				<span class="form-control">
-					{{dataObj.sale_order}}
+					{{tpl_dataObj.sale_order}}
 				</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
@@ -120,7 +119,7 @@
 					{{lang_011}} {{required}}
 				</span>
 				<span class="form-control">
-					{{dataObj.format}}
+					{{tpl_dataObj.format}}
 				</span>
 			</div>
 			<div id="general_input" class="input-group input-group-sm col-sm-4">
@@ -128,7 +127,7 @@
 					{{lang_012}} {{required}}
 				</span>
 				<span class="form-control">
-					{{dataObj.format_example}}
+					{{tpl_dataObj.format_example}}
 				</span>
 			</div>
 		</div>
@@ -139,7 +138,7 @@
 			  <input type="text" autofocus id="scan_result" class="form-control" placeholder={{{lang_013}}} aria-describedby="sizing-addon1">
 			</div>
 		</div>{{! /row }}
-	
+
 		<div id="konsoli_loki">
 			<div id="virhe" class="alert"></div>
 			<div id="virhe_kuvaus" class="alert"></div>
@@ -147,52 +146,25 @@
 
 	</div><!-- end of container -->
 	</script>
+	<script type="text/javascript">
+		sessionData =<?php echo $jsonString?>;
+		localStorage.setItem("sessionData", JSON.stringify(sessionData));
+		regex_format = sessionData.format;
+	</script>
+	<script src="../js/ui_data.js" type="text/javascript"></script>
 	<script src="../js/main.js" type="text/javascript"></script>
 
 	<script type="text/javascript">
-	var jsonData =<?php echo $jsonString?>;
 	(function(){
-	    // Grab the template script $("homeview-template").html()
-		var myInfo = document.getElementById("homeview-template").innerHTML;
+	    // Grab the template script $("ui_template").html()
+		var myInfo = document.getElementById("ui_template").innerHTML;
 
 		// Compile the template
 		var template = Handlebars.compile(myInfo);
 
-		// Define our data object
-		var data = {
-			app_name: "SerialScan",
-			lang_001:"session_user: ",
-			lang_002:"session_login_time: ",
-			lang_003:"New Session",
-			lang_004:"Save & close session",
-			lang_005:" Toggle-Edit",
-			lang_006:" Text-size",
-			lang_007:" Print or &nbsp<kbd>ctrl&nbsp+&nbspp</kbd>",
-			lang_008:"Assembly number  ",
-			lang_009:"Revision ",
-			lang_010:"Sale Order ",
-			lang_011:"Format ",
-			lang_012:"Format Example ",
-			lang_013:"new serial number (auto-submit)",
-			lang_014:"Customer ",
-			logo_size: "border:0;max-width:40px;max-height:40px;",
-			logo_file: "../img/serialscan.png",
-			ent: 'Express Manufacturing Inc.',
-			cmod_link: '<a href="cmod_console.php"><span class="label label-default no-print"><span class="glyphicon glyphicon-cog"></span>&nbspCMOD&nbsp<span class="glyphicon glyphicon-barcode"></span>&nbsp<span class="glyphicon glyphicon-qrcode"></span></span></a>',
-			dataObj:{
-				primary_key: jsonData.primary_key,
-			    assembly: jsonData.assembly,
-			    revision: jsonData.revision,
-			    customer: jsonData.customer,
-			    sale_order: jsonData.sale_order,
-			    format: jsonData.format,
-			    format_example: jsonData.format_example,
-			    access_level: jsonData.access_level,
-			    username: jsonData.username,
-			    time: jsonData.time,
-			    sessionId: "sessionId: " + jsonData.sessionId
-			}
-		};
+		// Define our data object -- tpl_data portion re-allocated.
+		var data = JSON.parse(localStorage.getItem("tpl_data"));
+
 		Handlebars.registerHelper("required", function(){
 			return new Handlebars.SafeString('<span class="required"> * </span>');
 		});
@@ -204,7 +176,7 @@
 			}
 		});
 		// Pass our data to the template and add the compiled html to the page
-		document.getElementById("homeviewData").innerHTML += template(data);
+		document.getElementById("ui_data").innerHTML += template(data);
 	})();
 	</script>
 

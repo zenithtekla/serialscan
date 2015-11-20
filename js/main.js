@@ -19,12 +19,9 @@ $(document).ready(function() {
             e.preventDefault();
             switch (e.which) {
                 case 13:
-                    $("#virhe_kuvaus")  .addClass("alert-info")
-                                        .empty().append(' input saved with {Enter} key ! ');
-                    $("#virhe_kuvaus").show(); // ajax to scan_proc.php
                     setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 2000 );
+                    console.log(regex_format);
                     var q = $(this).val();
-                    // console.log(q);
                     $.ajax({
                         type:'POST',
                         url: '../controller/scan_proc.php',
@@ -37,15 +34,19 @@ $(document).ready(function() {
                                         .addClass("alert-danger");
                             $("#virhe").empty().append("Attention: " + data);
                         } else {
-                        $("#virhe") .removeClass("alert-danger")
-                                    .addClass("alert-success");
-                        
-                        $("#virhe").empty().append("last scan: " + data);
-                        $("#log-wrapper")  .append( data + "<br/>")
-                                            .addClass("bg-success")
-                                            .css({  "max-height":"300px",
-                                                    "overflow-y" : "auto" })
-                        .animate({"scrollTop": $("#log-wrapper")[0].scrollHeight}, "slow");
+                            $("#virhe_kuvaus")  .addClass("alert-info")
+                                            .empty().append(' input saved with {Enter} key ! ');
+                            $("#virhe_kuvaus").show(); // ajax to scan_proc.php
+                            
+                            $("#virhe") .removeClass("alert-danger")
+                                        .addClass("alert-success");
+                            
+                            $("#virhe").empty().append("last scan: " + data);
+                            $("#log-wrapper")  .append( data + "<br/>")
+                                                .addClass("bg-success")
+                                                .css({  "max-height":"300px",
+                                                        "overflow-y" : "auto" })
+                            .animate({"scrollTop": $("#log-wrapper")[0].scrollHeight}, "slow");
                         }
                     }).fail(function(jqXHR,textStatus, errorThrown){
                         $("#virhe") .removeClass("alert-success")

@@ -1,3 +1,24 @@
+(function(){
+    var content = document.getElementById('ui_data');
+
+    var data = JSON.parse(localStorage.getItem("tpl_data"));
+
+    Handlebars.registerHelper('bold',function(text){
+        text = Handlebars.escapeExpression(text);
+       return new Handlebars.SafeString('<b>'+text+'</b>');
+    });
+    Handlebars.registerHelper('italic',function(text){
+        text = Handlebars.escapeExpression(text);
+       return new Handlebars.SafeString('<i>'+text+'</i>');
+    });
+    Handlebars.registerHelper("required", function(){
+			return new Handlebars.SafeString('<span class="required"> * </span>');
+		});
+
+    var template = Handlebars.compile(document.getElementById('ui_template').innerHTML);
+    content.innerHTML += template(data);
+})();
+
 function doToggle(id) {
     var e= document.getElementById(id);
     if ( e.style.display == 'block' )

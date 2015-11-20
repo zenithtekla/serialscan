@@ -134,46 +134,46 @@
 	echo $_SESSION['is_auth'];
 	/* <input type="text" <?php echo helper_get_tab_index()?> name="username"> */
 ?>
-	<section id="myData"></section>
-	<script type="text/template" id="url-template">
+	<section id="ui_data"></section>
+	<script type="text/template" id="ui_template">
 
 	<div class="container">
-		{{heading title}}
+		<h3> {{app_name}} {{app_name_ext1}} </h3>
 	<br/>
 	<form action="../controller/front_post.php" method="post">
 
 		<div class="padding">
-			{{username}} {{required}}
+			{{lang_015}} {{required}}
 				<input type="text" name="username" class="typeahead" required>
 		</div>
 
 		<div class="padding">
-			{{password}} {{required}}
+			{{lang_016}} {{required}}
 				<input type="password" name="password" class="typeahead" required>
 		</div>
 
 		<div class="padding">
-			{{sale_order}} {{required}}
+			{{lang_010}} {{required}}
 				<input type="text" name="sale_order" class="typeahead" required>
 		</div>
 
 		<div id="customer" class="scrollable-dropdown-menu padding">
-			{{bold customer}} {{required}}
+			{{bold lang_014}} {{required}}
 				<input class="typeahead" type="text" name="customer" id="customer">
 		</div>
 
 		<div id="assembly" class="scrollable-dropdown-menu padding">
-			{{italic assembly}} {{required}}
+			{{italic lang_008}} {{required}}
 				<input class="typeahead" type="text" name="assembly">
 		</div>
 
 		<div id="revision" class="scrollable-dropdown-menu padding">
-			{{revision}} {{required}}
+			{{lang_009}} {{required}}
 				<input class="typeahead" type="text" name="revision">
 		</div>
 
 		<div id="format" class="scrollable-dropdown-menu padding">
-			{{format}} {{required}}
+			{{lang_011}} {{required}}
 				<input class="typeahead" type="text" name="format">
 		</div>
 
@@ -181,13 +181,14 @@
 		<input type="hidden" name="customer_id">
 		<input type="hidden" name="format_example">
 
-		<input type="submit" value="{{{session}}}" class="button-submit"> <input type="{{{reset}}}" class="button-reset" value="Reset">
+		<input type="submit" value="{{{lang_017}}}" class="button-submit"> <input type="{{{lang_018}}}" class="button-reset" value="Reset">
 		<br/>
 		<br/>
 		<div id="result"></div>
 	</form>
 	</div>
 	</script>
+<script src="../js/ui_data.js" type="text/javascript"></script>
 <script src="../js/front.js" type="text/javascript"></script>
 </body>
 </html>
