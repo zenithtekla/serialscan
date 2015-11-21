@@ -151,7 +151,7 @@
 		localStorage.setItem("sessionData", JSON.stringify(sessionData));
 		regex_format = sessionData.format;
 	</script>
-	<script src="../js/ui_data.js" type="text/javascript"></script>
+	<script src="../model/ui/ui_data.js" type="text/javascript"></script>
 	<script src="../js/main.js" type="text/javascript"></script>
 
 	<script type="text/javascript">

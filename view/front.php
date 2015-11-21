@@ -188,7 +188,7 @@
 	</form>
 	</div>
 	</script>
-<script src="../js/ui_data.js" type="text/javascript"></script>
+<script src="../model/ui/ui_data.js" type="text/javascript"></script>
 <script src="../js/front.js" type="text/javascript"></script>
 </body>
 </html>

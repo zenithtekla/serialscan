@@ -63,7 +63,7 @@
 	<div class="container">
 	<article>
 		<h3>{{app_name_ext2}}</h3>
-		<button id="toggleEdit" onclick="doToggle(\'edelQ\');">{{lang_019}}</button><em>{{lang_020}}</em>
+		<button id="toggleEdit" onclick="doToggle('edelQ');">{{lang_019}}</button><em>{{lang_020}}</em>
 		<div id="edelQ"><pre id="output" class="cm-s-default"></pre></div>
 		<br/>
 		<br/>
@@ -71,14 +71,7 @@
 		    <div id="query" class="col-lg-8 input-xl margin-left">
 				<form id="myForm">
 				<textarea id="mycode" name="code" class="field span12" cols="140" rows="10">
-					-- SQL Code Sample
-					CREATE TABLE IF NOT EXISTS `seriscan_format` (
-						`id` int(11) NOT NULL AUTO_INCREMENT,
-						-- id = formatId
-						`format` varchar(60) NOT NULL,
-						`format_example` varchar(60) NOT NULL,
-						PRIMARY KEY (`id`)
-					) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1703 ;
+					{{sample_code}}
 				</textarea>
 				</form>
 
@@ -108,11 +101,11 @@
 		    <div id="hakutulos"></div>
 		</div><!-- /row -->
 		<br/>
-		<button id="toggleEditing" onclick="doToggle(\'querytulos\');">{{lang_019}}</button> {{lang_024}}
+		<button id="toggleEditing" onclick="doToggle('querytulos');">{{lang_019}}</button> {{lang_024}}
 		<div id="querytulos"></div>
 	</div>
 	</script>
-	<script src="../js/ui_data.js" type="text/javascript"></script>
+	<script src="../model/ui/ui_data.js" type="text/javascript"></script>
 	<script src="../js/cmod_console.js" type="text/javascript"></script>
 </body>
 </html>

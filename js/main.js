@@ -19,53 +19,64 @@ $(document).ready(function() {
             e.preventDefault();
             switch (e.which) {
                 case 13:
-                    setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 2000 );
+                    setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 3500 );
                     console.log(regex_format);
                     var q = $(this).val();
-                    $.ajax({
-                        type:'POST',
-                        url: '../controller/scan_proc.php',
-                        data: { new_scan: q}
-                        //contentType: "application/json",
-                        // dataType: 'json'
-                    }).done(function(data){
-                        if (data.indexOf('ERROR')>-1){
+                    
+                    // upfront validation
+                    var regex = new RegExp(regex_format);
+                    if(regex.test(q)) {
+                        $.ajax({
+                            type:'POST',
+                            url: '../controller/scan_proc.php',
+                            data: { new_scan: q, regex: regex_format}
+                            //contentType: "application/json",
+                            // dataType: 'json'
+                        }).done(function(data){
+                            if (data.indexOf('ERROR')>-1){
+                                $("#virhe") .removeClass("alert-success")
+                                            .addClass("alert-danger");
+                                $("#virhe").empty().append("Attention: " + data);
+                            } else {
+                                $("#virhe_kuvaus")  .addClass("alert-info")
+                                                .empty().append(' input saved with {Enter} key ! ');
+                                $("#virhe_kuvaus").show(); // ajax to scan_proc.php
+                                
+                                $("#virhe") .removeClass("alert-danger")
+                                            .addClass("alert-success");
+                                
+                                $("#virhe").empty().append("last scan: " + data);
+                                $("#log-wrapper")  .append( data + "<br/>")
+                                                    .addClass("bg-success")
+                                                    .css({  "max-height":"300px",
+                                                            "overflow-y" : "auto" })
+                                .animate({"scrollTop": $("#log-wrapper")[0].scrollHeight}, "slow");
+                            }
+                        }).fail(function(jqXHR,textStatus, errorThrown){
                             $("#virhe") .removeClass("alert-success")
-                                        .addClass("alert-danger");
-                            $("#virhe").empty().append("Attention: " + data);
-                        } else {
-                            $("#virhe_kuvaus")  .addClass("alert-info")
-                                            .empty().append(' input saved with {Enter} key ! ');
-                            $("#virhe_kuvaus").show(); // ajax to scan_proc.php
-                            
-                            $("#virhe") .removeClass("alert-danger")
-                                        .addClass("alert-success");
-                            
-                            $("#virhe").empty().append("last scan: " + data);
-                            $("#log-wrapper")  .append( data + "<br/>")
-                                                .addClass("bg-success")
-                                                .css({  "max-height":"300px",
-                                                        "overflow-y" : "auto" })
-                            .animate({"scrollTop": $("#log-wrapper")[0].scrollHeight}, "slow");
-                        }
-                    }).fail(function(jqXHR,textStatus, errorThrown){
+                                        .addClass("alert-danger")
+                                        .empty().append('!ERROR: ' + textStatus + ", " + errorThrown);
+                            console.log('ERROR', textStatus, errorThrown);
+                        });
+                    } else {
                         $("#virhe") .removeClass("alert-success")
-                                    .addClass("alert-danger")
-                                    .empty().append('!ERROR: ' + textStatus + ", " + errorThrown);
-                        console.log('ERROR', textStatus, errorThrown);
-                    });
+                                        .addClass("alert-danger");
+                        $("#virhe").empty().append("ERROR - regEx not matched!");
+                        setTimeout(function () { $("#virhe").removeClass("alert-danger").hide(); }, 10000 );
+                    }
                     break;
+                
                 case 1:
                     $("#virhe_kuvaus")  .addClass("alert-info")
                                         .empty().append(' input saved with {left-clicked} key ! ');
                     $("#virhe_kuvaus").show();
-                    setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 2000 );
+                    setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 3500 );
                     break;
                 case 9:
                     $("#virhe_kuvaus")  .addClass("alert-info")
                                         .empty().append(' input saved with {Tab} key ! ');
                     $("#virhe_kuvaus").show();
-                    setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 2000 );
+                    setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 3500 );
                     break;
             }
         }

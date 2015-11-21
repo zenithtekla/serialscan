@@ -28,6 +28,14 @@ var tpl_data = {
 	lang_022:"Query ",
 	lang_023:" Search",
 	lang_024:" display fetching queryResult",
+	sample_code: ` -- SQL Code Sample
+					CREATE TABLE IF NOT EXISTS 'seriscan_format' (
+						'id' int(11) NOT NULL AUTO_INCREMENT,
+						-- id = formatId
+						'format' varchar(60) NOT NULL,
+						'format_example' varchar(60) NOT NULL,
+						PRIMARY KEY ('id')
+					) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1703 ; `,
 	logo_size: "border:0;max-width:40px;max-height:40px;",
 	logo_file: "../img/serialscan.png",
 	ent: "Express Manufacturing Inc.",

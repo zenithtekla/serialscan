@@ -8,8 +8,9 @@
 
     if(isset($_POST['new_scan']))
 {
-    $t_new_scan       = $_POST['new_scan'];
-    $regex          = "/[0-9]{7}/"; // $regex = $_SESSION['format'];
+    $t_new_scan     = $_POST['new_scan'];
+    $regex          = "/". $_POST['regex'] . "/"; // reg from database retrieved through ajax does not have back-slashes
+    // $regex          = "/[0-9]{7}/"; // $regex = $_SESSION['format'];
     if (is_scalar($t_new_scan)){
         if (preg_match($regex, $t_new_scan)){
             $t_serial_table = 'seriscan_serial';
