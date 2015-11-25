@@ -1,0 +1,534 @@
+diff --git a/controller/on_submit_processing.php b/controller/on_submit_processing.php
+deleted file mode 100644
+index 424c867..0000000
+--- a/controller/on_submit_processing.php
++++ /dev/null
+@@ -1,60 +0,0 @@
+-<?php
+-class NewInput {
+-	public $input_type = "";
+-	public $input_field_name = "";
+-	public $input_field_value = "";
+-	function __construct($input_type, $input_field_name, $input_field_value){
+-		$this->input_type = $input_type;
+-		$this->input_field_name = $input_field_name;
+-		$this->input_field_value = $input_field_value;
+-	}
+-	function __destruct(){}
+-
+-	function setInputType($val){
+-		$this->input_type = $val;
+-	}
+-	function getInputType(){
+-		return $this->input_type;
+-	}
+-
+-	function setFieldName($val){
+-		$this->input_field_name = $val;
+-	}
+-	function getFieldName(){
+-		return $this->input_field_name;
+-	}
+-
+-	function setFieldValue($val){
+-		$this->input_field_value = $val;
+-	}
+-	function getFieldValue(){
+-		return $this->input_field_value;
+-	}
+-}
+-
+-// load and evaluate input text
+-
+-$t_input_type = mysql_real_escape_string($_POST['pk']);
+-$t_input_field_name = mysql_real_escape_string($_POST['name']);
+-$t_input_field_value = mysql_real_escape_string($_POST['value']);
+-$t_new_input = new NewInput($t_input_type,$t_input_field_name,$t_input_field_value);
+-
+-$t_type = $t_new_input->getInputType();
+-
+-switch ($t_type) {
+-	case '3':
+-		$t_assembly_number = $t_new_input->getInputValue();
+-		break;
+-
+-	case '4':
+-		$t_revision = $t_new_input->getInputValue();
+-		break;
+-
+-	case '5':
+-		$t_sale_order = $t_new_input->getInputValue();
+-		break;
+-
+-	default:
+-		$t_serial_number = $t_new_input->getInputValue();
+-		break;
+-}
+\ No newline at end of file
+diff --git a/js/front.js b/js/front.js
+index 12bce24..51bd3d8 100644
+--- a/js/front.js
++++ b/js/front.js
+@@ -23,6 +23,54 @@
+     var template = Handlebars.compile(document.getElementById('ui_template').innerHTML);
+     content.innerHTML += template(data);
+ })();
++var substringMatcher = function(strs) {
++  return function findMatches(q, cb) {
++    var matches, substrRegex;
++
++    // an array that will be populated with substring matches
++    matches = [];
++
++    // regex used to determine if a string contains the substring `q`
++    substrRegex = new RegExp(q, 'i');
++
++    // iterate through the pool of strings and for any string that
++    // contains the substring `q`, add it to the `matches` array
++    $.each(strs, function(i, str) {
++      if (substrRegex.test(str)) {
++        matches.push(str);
++      }
++    });
++
++    cb(matches);
++  };
++};
++/*
++(function(){
++$.getJSON("../model/json_db/customer.php", function(data) {
++  //  var string = JSON.stringify(data); // make string
++  //  var data = $.parseJSON(string); // make arrays from string
++    console.log(data);
++  var local = $.map(data, function(obj) {
++      return { value : obj.customer_name, eg: obj.customer_id };
++  });
++  console.log(local);
++  console.log(local.value);
++
++  $('#customer .typeahead').typeahead({
++    hint: true,
++    highlight: true,
++    minLength: 1
++  },
++  {
++    name: 'data',
++    // `ttAdapter` wraps the suggestion engine in an adapter that
++    // is compatible with the typeahead jQuery plugin
++    source: substringMatcher(data)
++  });
++}).error(function(){
++            console.log('error');
++  });
++})();*/
+ 
+ (function(){
+ var jqDeferred = $.ajax({
+@@ -57,7 +105,6 @@ var jqDeferred = $.ajax({
+ 
+       // Instantiate the Typeahead UI
+       $('#customer .typeahead').typeahead(null, {
+-          name: 'data',
+           displayKey: 'value',
+           hint: true,
+           highlight: true,
+@@ -76,8 +123,8 @@ var jqDeferred = $.ajax({
+               }
+           }
+       });
+-  })
+-  .fail(function(jqXHR, textStatus, errorThrown){
++  },
++  function(jqXHR, textStatus, errorThrown){
+     console.log('ERROR', textStatus, errorThrown);
+   });
+ })();
+@@ -141,8 +188,8 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
+     });
+     $('#customer .typeahead').typeahead('close');
+     $('#assembly .typeahead').focus();
+-  })
+-  .fail(function(jqXHR, textStatus, errorThrown){
++  }
++  , function(jqXHR, textStatus, errorThrown){
+     console.log(jqXHR, textStatus, errorThrown);
+   });
+ });
+@@ -208,8 +255,8 @@ $('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
+       });
+       $('#assembly .typeahead').typeahead('close');
+       $('#revision .typeahead').focus();
+-  })
+-  .fail(function(jqXHR, textStatus, errorThrown){
++  }
++  , function(jqXHR, textStatus, errorThrown){
+     console.log(jqXHR, textStatus, errorThrown);
+   });
+ });
+@@ -273,8 +320,8 @@ $('#revision .typeahead').bind('typeahead:select', function(ev, suggestion) {
+       });
+       $('#revision .typeahead').typeahead('close');
+       $('#format .typeahead').focus();
+-  })
+-  .fail(function(jqXHR, textStatus, errorThrown){
++  }
++  , function(jqXHR, textStatus, errorThrown){
+     console.log(jqXHR, textStatus, errorThrown);
+   });
+ });
+diff --git a/js/main.js b/js/main.js
+index 519d5bf..677a3d7 100644
+--- a/js/main.js
++++ b/js/main.js
+@@ -1,10 +1,55 @@
+ $(document).ready(function() {
+-    $("#printable").find('.print').on('click', function() {
++    $('#printable .print').on('click', function() {
+       $("#printable").print({
+         deferred: $.Deferred(),
+         timeout: 250
+       });
+     });
++    var myfunc = function(q){
++        setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 3500 );
++        console.log(regex_format);
++        // upfront validation
++        var regex = new RegExp(regex_format);
++        if(regex.test(q)) {
++            $.ajax({
++                type:'POST',
++                url: '../controller/scan_proc.php',
++                data: { new_scan: q, regex: regex_format}
++                //contentType: "application/json",
++                // dataType: 'json'
++            }).done(function(data){
++                if (data.indexOf('ERROR')>-1){
++                    $("#virhe") .removeClass("alert-success")
++                                .addClass("alert-danger");
++                    $("#virhe").empty().append("Attention: " + data);
++                } else {
++                    $("#virhe_kuvaus")  .addClass("alert-info")
++                                    .empty().append(' input saved with {Enter} key ! ');
++                    $("#virhe_kuvaus").show(); // ajax to scan_proc.php
++                    
++                    $("#virhe") .removeClass("alert-danger")
++                                .addClass("alert-success");
++                    
++                    $("#virhe").empty().append("last scan: " + data);
++                    $("#log-wrapper")  .append( data + "<br/>")
++                                        .addClass("bg-success")
++                                        .css({  "max-height":"300px",
++                                                "overflow-y" : "auto" })
++                    .animate({"scrollTop": $("#log-wrapper")[0].scrollHeight}, "slow");
++                }
++            }).fail(function(jqXHR,textStatus, errorThrown){
++                $("#virhe") .removeClass("alert-success")
++                            .addClass("alert-danger")
++                            .empty().append('!ERROR: ' + textStatus + ", " + errorThrown);
++                console.log('ERROR', textStatus, errorThrown);
++            });
++        } else {
++            $("#virhe") .removeClass("alert-success")
++                            .addClass("alert-danger");
++            $("#virhe").empty().append("ERROR - regEx not matched!");
++            setTimeout(function () { $("#virhe").removeClass("alert-danger").hide(); }, 10000 );
++        }
++    };
+     $("#scan_result").on({
+         mouseenter: function(){
+             $(this).css("background-color", "lightgray");
+@@ -19,51 +64,7 @@ $(document).ready(function() {
+             e.preventDefault();
+             switch (e.which) {
+                 case 13:
+-                    setTimeout(function () { $("#virhe_kuvaus").removeClass("alert-info").hide(); }, 3500 );
+-                    console.log(regex_format);
+-                    var q = $(this).val();
+-                    
+-                    // upfront validation
+-                    var regex = new RegExp(regex_format);
+-                    if(regex.test(q)) {
+-                        $.ajax({
+-                            type:'POST',
+-                            url: '../controller/scan_proc.php',
+-                            data: { new_scan: q, regex: regex_format}
+-                            //contentType: "application/json",
+-                            // dataType: 'json'
+-                        }).done(function(data){
+-                            if (data.indexOf('ERROR')>-1){
+-                                $("#virhe") .removeClass("alert-success")
+-                                            .addClass("alert-danger");
+-                                $("#virhe").empty().append("Attention: " + data);
+-                            } else {
+-                                $("#virhe_kuvaus")  .addClass("alert-info")
+-                                                .empty().append(' input saved with {Enter} key ! ');
+-                                $("#virhe_kuvaus").show(); // ajax to scan_proc.php
+-                                
+-                                $("#virhe") .removeClass("alert-danger")
+-                                            .addClass("alert-success");
+-                                
+-                                $("#virhe").empty().append("last scan: " + data);
+-                                $("#log-wrapper")  .append( data + "<br/>")
+-                                                    .addClass("bg-success")
+-                                                    .css({  "max-height":"300px",
+-                                                            "overflow-y" : "auto" })
+-                                .animate({"scrollTop": $("#log-wrapper")[0].scrollHeight}, "slow");
+-                            }
+-                        }).fail(function(jqXHR,textStatus, errorThrown){
+-                            $("#virhe") .removeClass("alert-success")
+-                                        .addClass("alert-danger")
+-                                        .empty().append('!ERROR: ' + textStatus + ", " + errorThrown);
+-                            console.log('ERROR', textStatus, errorThrown);
+-                        });
+-                    } else {
+-                        $("#virhe") .removeClass("alert-success")
+-                                        .addClass("alert-danger");
+-                        $("#virhe").empty().append("ERROR - regEx not matched!");
+-                        setTimeout(function () { $("#virhe").removeClass("alert-danger").hide(); }, 10000 );
+-                    }
++                    myfunc($(this).val());
+                     break;
+                 
+                 case 1:
+@@ -99,7 +100,7 @@ $(document).ready(function() {
+     $('#is_logout').on('click',function(e){
+         e.preventDefault();
+         $.post("../controller/core/is_logout.php", {"is_logout": true}, function(data){
+-          if (data.is_logout) window.location = "../controller/core/logout.php";
++          if (data.is_logout) window.location.replace("../controller/core/logout.php");
+         },"json");
+     }); /*
+ 
+@@ -109,7 +110,31 @@ $(document).ready(function() {
+                 var arr = $.parseJSON(data);
+                 console.log(arr);
+                 if (arr.is_logout)
+-                    window.location = "../controller/core/logout.php";
++                    window.location.replace("../controller/core/logout.php");
+             });
+     }); */
+-});
+\ No newline at end of file
++});
++
++(function(){
++    // Grab the template script $("ui_template").html()
++	var myInfo = document.getElementById("ui_template").innerHTML;
++
++	// Compile the template
++	var template = Handlebars.compile(myInfo);
++
++	// Define our data object -- tpl_data portion re-allocated.
++	var data = JSON.parse(localStorage.getItem("tpl_data"));
++
++	Handlebars.registerHelper("required", function(){
++		return new Handlebars.SafeString('<span class="required"> * </span>');
++	});
++	Handlebars.registerHelper("notGreater", function(num1, num2, options){
++		if (num2 > num1){
++			return options.fn(this);
++		} else {
++			return options.inverse(this);
++		}
++	});
++	// Pass our data to the template and add the compiled html to the page
++	document.getElementById("ui_data").innerHTML += template(data);
++})();
+\ No newline at end of file
+diff --git a/model/config_inc.php b/model/config_inc.php
+deleted file mode 100644
+index de825a4..0000000
+--- a/model/config_inc.php
++++ /dev/null
+@@ -1,6 +0,0 @@
+-<?php
+-$g_hostname = 'localhost';
+-$g_db_type = 'mysql';
+-$g_database_name = 'mantisbt';
+-$g_db_username = 'root';
+-$g_db_password = 'triet2d';
+\ No newline at end of file
+diff --git a/model/db_api.php b/model/db_api.php
+index 5a75dbe..40f358e 100644
+--- a/model/db_api.php
++++ b/model/db_api.php
+@@ -85,4 +85,64 @@ class Seriscan {
+ 			break;
+ 	}
+ 
++}
++
++class NewInput {
++	public $input_type = "";
++	public $input_field_name = "";
++	public $input_field_value = "";
++	function __construct($input_type, $input_field_name, $input_field_value){
++		$this->input_type = $input_type;
++		$this->input_field_name = $input_field_name;
++		$this->input_field_value = $input_field_value;
++	}
++	function __destruct(){}
++
++	function setInputType($val){
++		$this->input_type = $val;
++	}
++	function getInputType(){
++		return $this->input_type;
++	}
++
++	function setFieldName($val){
++		$this->input_field_name = $val;
++	}
++	function getFieldName(){
++		return $this->input_field_name;
++	}
++
++	function setFieldValue($val){
++		$this->input_field_value = $val;
++	}
++	function getFieldValue(){
++		return $this->input_field_value;
++	}
++}
++
++// load and evaluate input text
++
++$t_input_type = mysql_real_escape_string($_POST['pk']);
++$t_input_field_name = mysql_real_escape_string($_POST['name']);
++$t_input_field_value = mysql_real_escape_string($_POST['value']);
++$t_new_input = new NewInput($t_input_type,$t_input_field_name,$t_input_field_value);
++
++$t_type = $t_new_input->getInputType();
++
++switch ($t_type) {
++	case '3':
++		$t_assembly_number = $t_new_input->getInputValue();
++		break;
++
++	case '4':
++		$t_revision = $t_new_input->getInputValue();
++		break;
++
++	case '5':
++		$t_sale_order = $t_new_input->getInputValue();
++		break;
++
++	default:
++		$t_serial_number = $t_new_input->getInputValue();
++		break;
+ }
+\ No newline at end of file
+diff --git a/plugin/typeahead/typeahead.bundle.js b/plugin/typeahead/typeahead.bundle.js
+index bb0c8ae..e1f2368 100644
+--- a/plugin/typeahead/typeahead.bundle.js
++++ b/plugin/typeahead/typeahead.bundle.js
+@@ -414,7 +414,7 @@
+     }();
+     var SearchIndex = window.SearchIndex = function() {
+         "use strict";
+-        var CHILDREN = "c", IDS = "i";
++        var CHILDREN = "children", IDS = "ids";
+         function SearchIndex(o) {
+             o = o || {};
+             if (!o.datumTokenizer || !o.queryTokenizer) {
+@@ -435,15 +435,19 @@
+                 data = _.isArray(data) ? data : [ data ];
+                 _.each(data, function(datum) {
+                     var id, tokens;
+-                    that.datums[id = that.identify(datum)] = datum;
++                    id = that.identify(datum);
++                    that.datums[id] = datum;
+                     tokens = normalizeTokens(that.datumTokenizer(datum));
+                     _.each(tokens, function(token) {
+                         var node, chars, ch;
+                         node = that.trie;
+                         chars = token.split("");
+-                        while (ch = chars.shift()) {
++                        
++                        for (var i = 0; i < chars.length; i++) {
++                            ch = chars[i];
+                             node = node[CHILDREN][ch] || (node[CHILDREN][ch] = newNode());
+                             node[IDS].push(id);
++                            // console.log(node);
+                         }
+                     });
+                 });
+@@ -507,6 +511,18 @@
+             });
+             return tokens;
+         }
++        function Trie(key) {
++            var node = {};
++            node[IDS] = [];
++            node[IDS].key = key;
++            node[CHILDREN] = {};
++            return node;
++/*            var node = {};
++            node[IDS] = [];
++            node[CHILDREN] = {};
++            return node;*/
++          //children are merged with this object since collision is minimal
++        }
+         function newNode() {
+             var node = {};
+             node[IDS] = [];
+diff --git a/view/cmod_enter.php b/view/cmod_enter.php
+index 7ef7b79..395becd 100644
+--- a/view/cmod_enter.php
++++ b/view/cmod_enter.php
+@@ -16,11 +16,11 @@
+ 		<h2>{{lang_026}}</h2>
+ 		<br/>
+ 		<form action="../controller/cmod_enter_post.php" method="post">
+-			<p>{{lang_014}} {{required}} 	<input type="text" name="customer_name"></p>
+-			<p>{{lang_008}} {{required}} 	<input type="text" name="assembly_number"></p>
+-			<p>{{lang_009}} {{required}} 	<input type="text" name="revision"></p>
+-			<p>{{lang_011}} {{required}} 	<input type="text" name="format"></p>
+-			<p>{{lang_012}} {{required}} 	<input type="text" name="format_example"></p>
++			<p>{{lang_014}} {{required}} 	<input type="text" name="customer_name" required></p>
++			<p>{{lang_008}} {{required}} 	<input type="text" name="assembly_number" required></p>
++			<p>{{lang_009}} {{required}} 	<input type="text" name="revision" required></p>
++			<p>{{lang_011}} {{required}} 	<input type="text" name="format" required></p>
++			<p>{{lang_012}} {{required}} 	<input type="text" name="format_example" required></p>
+ 
+ 			<input type="submit" value="{{lang_025}}"> <input type="reset" class="marginleft" value="{{lang_018}}">
+ 		</form>
+diff --git a/view/serialscan_main_view.php b/view/serialscan_main_view.php
+index 57599e2..0849481 100644
+--- a/view/serialscan_main_view.php
++++ b/view/serialscan_main_view.php
+@@ -153,33 +153,5 @@
+ 	</script>
+ 	<script src="../model/ui/ui_data.js" type="text/javascript"></script>
+ 	<script src="../js/main.js" type="text/javascript"></script>
+-
+-	<script type="text/javascript">
+-	(function(){
+-	    // Grab the template script $("ui_template").html()
+-		var myInfo = document.getElementById("ui_template").innerHTML;
+-
+-		// Compile the template
+-		var template = Handlebars.compile(myInfo);
+-
+-		// Define our data object -- tpl_data portion re-allocated.
+-		var data = JSON.parse(localStorage.getItem("tpl_data"));
+-
+-		Handlebars.registerHelper("required", function(){
+-			return new Handlebars.SafeString('<span class="required"> * </span>');
+-		});
+-		Handlebars.registerHelper("notGreater", function(num1, num2, options){
+-			if (num2 > num1){
+-				return options.fn(this);
+-			} else {
+-				return options.inverse(this);
+-			}
+-		});
+-		// Pass our data to the template and add the compiled html to the page
+-		document.getElementById("ui_data").innerHTML += template(data);
+-	})();
+-	</script>
+-
+-
+ </body>
+ </html>
+\ No newline at end of file

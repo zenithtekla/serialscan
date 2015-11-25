@@ -16,11 +16,11 @@
 		<h2>{{lang_026}}</h2>
 		<br/>
 		<form action="../controller/cmod_enter_post.php" method="post">
-			<p>{{lang_014}} {{required}} 	<input type="text" name="customer_name"></p>
-			<p>{{lang_008}} {{required}} 	<input type="text" name="assembly_number"></p>
-			<p>{{lang_009}} {{required}} 	<input type="text" name="revision"></p>
-			<p>{{lang_011}} {{required}} 	<input type="text" name="format"></p>
-			<p>{{lang_012}} {{required}} 	<input type="text" name="format_example"></p>
+			<p>{{lang_014}} {{required}} 	<input type="text" name="customer_name" required></p>
+			<p>{{lang_008}} {{required}} 	<input type="text" name="assembly_number" required></p>
+			<p>{{lang_009}} {{required}} 	<input type="text" name="revision" required></p>
+			<p>{{lang_011}} {{required}} 	<input type="text" name="format" required></p>
+			<p>{{lang_012}} {{required}} 	<input type="text" name="format_example" required></p>
 
 			<input type="submit" value="{{lang_025}}"> <input type="reset" class="marginleft" value="{{lang_018}}">
 		</form>

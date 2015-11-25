@@ -23,6 +23,54 @@
     var template = Handlebars.compile(document.getElementById('ui_template').innerHTML);
     content.innerHTML += template(data);
 })();
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substrRegex;
+
+    // an array that will be populated with substring matches
+    matches = [];
+
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str)) {
+        matches.push(str);
+      }
+    });
+
+    cb(matches);
+  };
+};
+/*
+(function(){
+$.getJSON("../model/json_db/customer.php", function(data) {
+  //  var string = JSON.stringify(data); // make string
+  //  var data = $.parseJSON(string); // make arrays from string
+    console.log(data);
+  var local = $.map(data, function(obj) {
+      return { value : obj.customer_name, eg: obj.customer_id };
+  });
+  console.log(local);
+  console.log(local.value);
+
+  $('#customer .typeahead').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+  },
+  {
+    name: 'data',
+    // `ttAdapter` wraps the suggestion engine in an adapter that
+    // is compatible with the typeahead jQuery plugin
+    source: substringMatcher(data)
+  });
+}).error(function(){
+            console.log('error');
+  });
+})();*/
 
 (function(){
 var jqDeferred = $.ajax({
@@ -57,7 +105,6 @@ var jqDeferred = $.ajax({
 
       // Instantiate the Typeahead UI
       $('#customer .typeahead').typeahead(null, {
-          name: 'data',
           displayKey: 'value',
           hint: true,
           highlight: true,
@@ -76,8 +123,8 @@ var jqDeferred = $.ajax({
               }
           }
       });
-  })
-  .fail(function(jqXHR, textStatus, errorThrown){
+  },
+  function(jqXHR, textStatus, errorThrown){
     console.log('ERROR', textStatus, errorThrown);
   });
 })();
@@ -141,8 +188,8 @@ $('#customer .typeahead').bind('typeahead:select', function(ev, suggestion) {
     });
     $('#customer .typeahead').typeahead('close');
     $('#assembly .typeahead').focus();
-  })
-  .fail(function(jqXHR, textStatus, errorThrown){
+  }
+  , function(jqXHR, textStatus, errorThrown){
     console.log(jqXHR, textStatus, errorThrown);
   });
 });
@@ -208,8 +255,8 @@ $('#assembly .typeahead').bind('typeahead:select', function(ev, suggestion) {
       });
       $('#assembly .typeahead').typeahead('close');
       $('#revision .typeahead').focus();
-  })
-  .fail(function(jqXHR, textStatus, errorThrown){
+  }
+  , function(jqXHR, textStatus, errorThrown){
     console.log(jqXHR, textStatus, errorThrown);
   });
 });
@@ -273,8 +320,8 @@ $('#revision .typeahead').bind('typeahead:select', function(ev, suggestion) {
       });
       $('#revision .typeahead').typeahead('close');
       $('#format .typeahead').focus();
-  })
-  .fail(function(jqXHR, textStatus, errorThrown){
+  }
+  , function(jqXHR, textStatus, errorThrown){
     console.log(jqXHR, textStatus, errorThrown);
   });
 });

@@ -77,6 +77,8 @@
 				{{lang_005}}</button>
 			<button type="button" id="suuruus-painike" class="btn btn-primary"><span class="glyphicon glyphicon-text-size"></span>
 				{{lang_006}}</button>
+			<button type="button" id="haku-painike" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span>
+				{{lang_023}}</button>
 			<button type="button" id="tulostaa-painike" class="btn btn-primary print"><span class="glyphicon glyphicon-print"></span>
 				{{{lang_007}}}</button>
 		</div>
@@ -153,33 +155,5 @@
 	</script>
 	<script src="../model/ui/ui_data.js" type="text/javascript"></script>
 	<script src="../js/main.js" type="text/javascript"></script>
-
-	<script type="text/javascript">
-	(function(){
-	    // Grab the template script $("ui_template").html()
-		var myInfo = document.getElementById("ui_template").innerHTML;
-
-		// Compile the template
-		var template = Handlebars.compile(myInfo);
-
-		// Define our data object -- tpl_data portion re-allocated.
-		var data = JSON.parse(localStorage.getItem("tpl_data"));
-
-		Handlebars.registerHelper("required", function(){
-			return new Handlebars.SafeString('<span class="required"> * </span>');
-		});
-		Handlebars.registerHelper("notGreater", function(num1, num2, options){
-			if (num2 > num1){
-				return options.fn(this);
-			} else {
-				return options.inverse(this);
-			}
-		});
-		// Pass our data to the template and add the compiled html to the page
-		document.getElementById("ui_data").innerHTML += template(data);
-	})();
-	</script>
-
-
 </body>
 </html>

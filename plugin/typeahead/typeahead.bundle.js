@@ -414,7 +414,7 @@
     }();
     var SearchIndex = window.SearchIndex = function() {
         "use strict";
-        var CHILDREN = "c", IDS = "i";
+        var CHILDREN = "children", IDS = "ids";
         function SearchIndex(o) {
             o = o || {};
             if (!o.datumTokenizer || !o.queryTokenizer) {
@@ -435,13 +435,16 @@
                 data = _.isArray(data) ? data : [ data ];
                 _.each(data, function(datum) {
                     var id, tokens;
-                    that.datums[id = that.identify(datum)] = datum;
+                    id = that.identify(datum);
+                    that.datums[id] = datum;
                     tokens = normalizeTokens(that.datumTokenizer(datum));
                     _.each(tokens, function(token) {
                         var node, chars, ch;
                         node = that.trie;
+                        // console.log(node);
                         chars = token.split("");
-                        while (ch = chars.shift()) {
+                        for (var i = 0; i < chars.length; i++) {
+                            ch = chars[i];
                             node = node[CHILDREN][ch] || (node[CHILDREN][ch] = newNode());
                             node[IDS].push(id);
                         }
@@ -506,6 +509,18 @@
                 return token.toLowerCase();
             });
             return tokens;
+        }
+        function Trie(key) {
+            var node = {};
+            node[IDS] = [];
+            node[IDS].key = key;
+            node[CHILDREN] = {};
+            return node;
+/*            var node = {};
+            node[IDS] = [];
+            node[CHILDREN] = {};
+            return node;*/
+          //children are merged with this object since collision is minimal
         }
         function newNode() {
             var node = {};
