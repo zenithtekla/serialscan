@@ -28,7 +28,7 @@ Many thanks for support.
 # Disclaimer
 - Acknowledge work from the creators when use.
 - The system is provided freely and by all means, used by end-users at all their own risks and expenses.
-- Uninstallation not provided.
+- Beware that Uninstallation is missing.
 
 # Troubleshoot
 - Try best to resolve issues on your end first.
