@@ -1,4 +1,5 @@
-# Serials ( #serial_scan, #serial_format )
+# Serials 
+( tags: serial_scan, serial_format )
 Serials (serial_scan &amp; serial_format) is the (CRUD, UI-rich) webApp that allows user input of 
 format, assembly number, revision, sale_order and scanner's input of serial number (bar_code scanned result). 
 Completed by Zephyr Phuc tran. 
